@@ -38,12 +38,13 @@ Plans:
 ### Phase 2: Supabase Backend
 **Goal**: Set up Supabase client, create database schema for budgets/transactions/categories, establish API integration patterns
 **Depends on**: Phase 1
-**Research**: Likely (new integration, database design)
+**Research**: Complete (DISCOVERY.md created 2026-01-11)
 **Research topics**: Supabase client setup in Next.js, schema design for budgets/transactions/categories with proper relationships, Row Level Security policies for single-user app
-**Plans**: TBD
+**Plans**: 1/2 complete
 
 Plans:
-- TBD (determined during phase planning)
+- [x] **02-01-PLAN.md** - Supabase Client Setup (browser + server clients with SSR support) - Completed 2026-01-11
+- [ ] **02-02-PLAN.md** - Database Schema Migration (budgets, transactions, categories tables with RLS policies)
 
 ### Phase 3: Budget Management
 **Goal**: Build UI for creating monthly budgets with total and per-category allocations
@@ -100,7 +101,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete | 2026-01-11 |
-| 2. Supabase Backend | 0/TBD | Not started | - |
+| 2. Supabase Backend | 1/2 | In progress | - |
 | 3. Budget Management | 0/TBD | Not started | - |
 | 4. Transaction System | 0/TBD | Not started | - |
 | 5. SMS Integration | 0/TBD | Not started | - |
