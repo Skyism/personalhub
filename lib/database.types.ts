@@ -114,6 +114,8 @@ export type Database = {
           note: string | null
           source: string
           transaction_date: string
+          twilio_from: string | null
+          twilio_message_id: string | null
           user_id: string
         }
         Insert: {
@@ -125,6 +127,8 @@ export type Database = {
           note?: string | null
           source?: string
           transaction_date?: string
+          twilio_from?: string | null
+          twilio_message_id?: string | null
           user_id: string
         }
         Update: {
@@ -136,6 +140,8 @@ export type Database = {
           note?: string | null
           source?: string
           transaction_date?: string
+          twilio_from?: string | null
+          twilio_message_id?: string | null
           user_id?: string
         }
         Relationships: [
