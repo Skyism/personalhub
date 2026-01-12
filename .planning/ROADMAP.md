@@ -69,12 +69,11 @@ Plans:
 ### Phase 5: SMS Integration
 **Goal**: Integrate Twilio webhook to parse "amount note" SMS messages and create uncategorized transactions (categories assigned later in UI)
 **Depends on**: Phase 4
-**Research**: Likely (external API integration)
-**Research topics**: Twilio webhook setup with Next.js API routes, SMS text parsing strategies for flexible input, webhook authentication and security best practices
-**Plans**: TBD
+**Status**: In progress (1/2 plans complete)
 
 Plans:
-- TBD (determined during phase planning)
+- [x] **05-01-PLAN.md** - SMS Webhook Integration (Twilio webhook with text parsing and idempotent transaction creation) - Completed 2026-01-12
+- [ ] **05-02-PLAN.md** - Manual Transaction Categorization (UI for assigning categories to uncategorized transactions)
 
 ### Phase 6: Analytics Dashboard
 **Goal**: Create spending visualization with category breakdowns, trends, and budget vs actual charts
