@@ -1,0 +1,118 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { createBudget } from '../actions'
+
+export default function NewBudgetPage() {
+  const router = useRouter()
+  const [month, setMonth] = useState('')
+  const [totalBudget, setTotalBudget] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError(null)
+    setIsSubmitting(true)
+
+    const budgetAmount = parseFloat(totalBudget)
+
+    if (isNaN(budgetAmount)) {
+      setError('Please enter a valid budget amount.')
+      setIsSubmitting(false)
+      return
+    }
+
+    const result = await createBudget(month, budgetAmount)
+
+    if (result.success) {
+      router.push('/finance/budgets')
+    } else {
+      setError(result.error || 'Failed to create budget.')
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-2xl mx-auto mt-8">
+        <div className="mb-6">
+          <Link
+            href="/finance/budgets"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
+            &larr; Back to Budgets
+          </Link>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Budget</h1>
+          <p className="text-gray-600 mb-6">Set up a new monthly budget</p>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="month" className="block text-sm font-medium text-gray-700 mb-2">
+                Month
+              </label>
+              <input
+                type="month"
+                id="month"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="totalBudget" className="block text-sm font-medium text-gray-700 mb-2">
+                Total Budget
+              </label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                <input
+                  type="number"
+                  id="totalBudget"
+                  value={totalBudget}
+                  onChange={(e) => setTotalBudget(e.target.value)}
+                  step="0.01"
+                  min="0.01"
+                  required
+                  placeholder="0.00"
+                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <p className="text-sm text-gray-500 mt-1">
+                Enter your total monthly budget in dollars
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Creating...' : 'Create Budget'}
+              </button>
+              <Link
+                href="/finance/budgets"
+                className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center"
+              >
+                Cancel
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}
