@@ -50,10 +50,11 @@ Plans:
 **Goal**: Build UI for creating monthly budgets with total and per-category allocations
 **Depends on**: Phase 2
 **Research**: Unlikely (internal UI building on Phase 2 patterns)
-**Plans**: TBD
+**Plans**: 1/2 complete
 
 Plans:
-- TBD (determined during phase planning)
+- [x] **03-01-PLAN.md** - Budget Overview & Creation (list, creation form, detail views) - Completed 2026-01-12
+- [ ] **03-02-PLAN.md** - Category Management (TBD)
 
 ### Phase 4: Transaction System
 **Goal**: Implement transaction list display and manual entry form with category assignment
@@ -102,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete | 2026-01-11 |
 | 2. Supabase Backend | 2/2 | Complete | 2026-01-11 |
-| 3. Budget Management | 0/TBD | Not started | - |
+| 3. Budget Management | 1/2 | In progress | - |
 | 4. Transaction System | 0/TBD | Not started | - |
 | 5. SMS Integration | 0/TBD | Not started | - |
 | 6. Analytics Dashboard | 0/TBD | Not started | - |
