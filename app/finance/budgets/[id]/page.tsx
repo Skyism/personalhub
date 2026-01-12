@@ -135,6 +135,45 @@ export default async function BudgetDetailPage({ params }: PageProps) {
     .eq('user_id', TEMP_USER_ID)
     .order('transaction_date', { ascending: false })
 
+  // Calculate spending summary
+  const totalSpent = transactions?.reduce((sum, t) => sum + t.amount, 0) || 0
+  const totalRemaining = budget.total_budget - totalSpent
+  const spentPercentage = budget.total_budget > 0 ? (totalSpent / budget.total_budget) * 100 : 0
+
+  // Calculate per-category spending
+  const categorySpending = transactions?.reduce((acc, t) => {
+    const categoryId = t.category_id
+    if (categoryId !== null) {
+      acc[categoryId] = (acc[categoryId] || 0) + t.amount
+    }
+    return acc
+  }, {} as Record<number, number>) || {}
+
+  // Build category breakdown with allocations
+  const categoryBreakdown = allocations?.map(allocation => {
+    const category = categories?.find(c => c.id === allocation.category_id)
+    const spent = categorySpending[allocation.category_id] || 0
+    const percentage = allocation.allocated_amount > 0 ? (spent / allocation.allocated_amount) * 100 : 0
+
+    return {
+      id: allocation.category_id,
+      name: category?.name || 'Unknown',
+      color: category?.color || null,
+      allocated: allocation.allocated_amount,
+      spent,
+      percentage
+    }
+  }) || []
+
+  // Get spending status color
+  function getStatusColor(percentage: number): string {
+    if (percentage >= 100) return 'red'
+    if (percentage >= 80) return 'yellow'
+    return 'green'
+  }
+
+  const statusColor = getStatusColor(spentPercentage)
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto mt-8">
@@ -192,6 +231,101 @@ export default async function BudgetDetailPage({ params }: PageProps) {
             allocations={allocations || []}
             totalBudget={budget.total_budget}
           />
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Spending Summary</h2>
+
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <div>
+                <p className="text-sm text-gray-600">
+                  {formatCurrency(totalSpent)} spent of {formatCurrency(budget.total_budget)} budget
+                </p>
+                <p className={`text-sm font-semibold ${
+                  statusColor === 'red' ? 'text-red-600' :
+                  statusColor === 'yellow' ? 'text-yellow-600' :
+                  'text-green-600'
+                }`}>
+                  {totalRemaining >= 0
+                    ? `${formatCurrency(totalRemaining)} remaining`
+                    : `${formatCurrency(Math.abs(totalRemaining))} over budget`
+                  }
+                </p>
+              </div>
+              <div className="text-right">
+                <p className={`text-2xl font-bold ${
+                  statusColor === 'red' ? 'text-red-600' :
+                  statusColor === 'yellow' ? 'text-yellow-600' :
+                  'text-green-600'
+                }`}>
+                  {spentPercentage.toFixed(0)}%
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+              <div
+                className={`h-full transition-all ${
+                  statusColor === 'red' ? 'bg-red-500' :
+                  statusColor === 'yellow' ? 'bg-yellow-500' :
+                  'bg-green-500'
+                }`}
+                style={{ width: `${Math.min(spentPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          {categoryBreakdown.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
+              <div className="space-y-4">
+                {categoryBreakdown.map(category => {
+                  const categoryStatusColor = getStatusColor(category.percentage)
+
+                  return (
+                    <div key={category.id} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="px-2 py-1 rounded text-xs font-medium"
+                            style={{
+                              backgroundColor: category.color ? `${category.color}20` : '#E5E7EB',
+                              color: category.color || '#6B7280'
+                            }}
+                          >
+                            {category.name}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-gray-900">
+                            {formatCurrency(category.spent)} / {formatCurrency(category.allocated)}
+                          </p>
+                          <p className={`text-xs font-semibold ${
+                            categoryStatusColor === 'red' ? 'text-red-600' :
+                            categoryStatusColor === 'yellow' ? 'text-yellow-600' :
+                            'text-green-600'
+                          }`}>
+                            {category.percentage.toFixed(0)}%
+                          </p>
+                        </div>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div
+                          className={`h-full transition-all ${
+                            categoryStatusColor === 'red' ? 'bg-red-500' :
+                            categoryStatusColor === 'yellow' ? 'bg-yellow-500' :
+                            'bg-green-500'
+                          }`}
+                          style={{ width: `${Math.min(category.percentage, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="bg-white rounded-lg shadow p-6 mt-6">
