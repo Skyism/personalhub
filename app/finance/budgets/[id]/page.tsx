@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { Tables } from '@/lib/database.types'
+import CategoryAllocation from './CategoryAllocation'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -59,6 +60,20 @@ export default async function BudgetDetailPage({ params }: PageProps) {
     notFound()
   }
 
+  // Fetch categories
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('user_id', TEMP_USER_ID)
+    .order('name', { ascending: true })
+
+  // Fetch category allocations
+  const { data: allocations } = await supabase
+    .from('category_allocations')
+    .select('*')
+    .eq('budget_id', budgetId)
+    .eq('user_id', TEMP_USER_ID)
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto mt-8">
@@ -110,13 +125,12 @@ export default async function BudgetDetailPage({ params }: PageProps) {
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Categories</h2>
-          <div className="text-center py-8 text-gray-500">
-            <p>No categories assigned yet.</p>
-            <p className="text-sm mt-2">
-              Category management will be available in the next phase.
-            </p>
-          </div>
+          <CategoryAllocation
+            budgetId={budgetId}
+            categories={categories || []}
+            allocations={allocations || []}
+            totalBudget={budget.total_budget}
+          />
         </div>
       </div>
     </div>

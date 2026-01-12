@@ -62,6 +62,48 @@ export type Database = {
         }
         Relationships: []
       }
+      category_allocations: {
+        Row: {
+          allocated_amount: number
+          budget_id: number
+          category_id: number
+          created_at: string | null
+          id: number
+          user_id: string
+        }
+        Insert: {
+          allocated_amount: number
+          budget_id: number
+          category_id: number
+          created_at?: string | null
+          id?: never
+          user_id: string
+        }
+        Update: {
+          allocated_amount?: number
+          budget_id?: number
+          category_id?: number
+          created_at?: string | null
+          id?: never
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "category_allocations_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "category_allocations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           amount: number
