@@ -152,3 +152,51 @@ export async function deleteTransaction(
     return { success: false, error: 'An unexpected error occurred.' }
   }
 }
+
+export async function updateTransactionCategory(
+  transactionId: number,
+  categoryId: number | null
+): Promise<TransactionResult> {
+  try {
+    const supabase = await createClient()
+
+    // If category_id is provided, verify it exists and belongs to user
+    if (categoryId !== null) {
+      const { data: category, error: categoryError } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('id', categoryId)
+        .eq('user_id', TEMP_USER_ID)
+        .maybeSingle()
+
+      if (categoryError || !category) {
+        return { success: false, error: 'Category not found or access denied' }
+      }
+    }
+
+    // Update transaction category
+    const { data, error: updateError } = await supabase
+      .from('transactions')
+      .update({ category_id: categoryId })
+      .eq('id', transactionId)
+      .eq('user_id', TEMP_USER_ID)
+      .select('budget_id')
+      .single()
+
+    if (updateError || !data) {
+      if (updateError?.code === 'PGRST116') {
+        return { success: false, error: 'Transaction not found' }
+      }
+      console.error('Error updating transaction category:', updateError)
+      return { success: false, error: 'Failed to update category. Please try again.' }
+    }
+
+    // Revalidate the budget detail page
+    revalidatePath(`/finance/budgets/${data.budget_id}`)
+
+    return { success: true }
+  } catch (error) {
+    console.error('Unexpected error updating transaction category:', error)
+    return { success: false, error: 'An unexpected error occurred.' }
+  }
+}
