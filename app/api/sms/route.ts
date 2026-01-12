@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import twilio from 'twilio'
 import { parseSMS } from '@/lib/twilio/parser'
-import { matchCategoryToId } from '@/lib/twilio/categories'
 import { createClient } from '@/lib/supabase/server'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
@@ -65,22 +64,19 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Parse SMS body to extract amount, category, note
-  const { amount, category, note } = parseSMS(smsBody)
+  // Parse SMS body to extract amount and note
+  const { amount, note } = parseSMS(smsBody)
 
   if (!amount) {
     // Could not parse amount - send error message back to user
     console.error('Failed to parse amount from SMS:', smsBody)
     return new NextResponse(
-      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee lunch with team"</Message></Response>',
+      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee at starbucks"</Message></Response>',
       {
         headers: { 'Content-Type': 'text/xml' },
       }
     )
   }
-
-  // Match category string to category_id (null if no match)
-  const categoryId = await matchCategoryToId(category, TEMP_USER_ID)
 
   // Get most recent budget for this user
   const { data: budget, error: budgetError } = await supabase
@@ -103,11 +99,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Create transaction with Twilio tracking fields
+  // Create uncategorized transaction (category assigned later in UI)
   const { error: insertError } = await supabase.from('transactions').insert({
     user_id: TEMP_USER_ID,
     budget_id: budget.id,
-    category_id: categoryId,
+    category_id: null, // Categories assigned later in UI
     amount,
     note,
     transaction_date: new Date().toISOString(),
@@ -129,7 +125,6 @@ export async function POST(request: NextRequest) {
   console.log('Transaction created successfully:', {
     MessageSid,
     amount,
-    category: categoryId,
     note,
   })
 
