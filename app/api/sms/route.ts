@@ -10,9 +10,15 @@ const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
 
 export async function POST(request: NextRequest) {
   const authToken = process.env.TWILIO_AUTH_TOKEN
+  const webhookUrl = process.env.NEXT_PUBLIC_URL
 
   if (!authToken) {
     console.error('TWILIO_AUTH_TOKEN not configured')
+    return new NextResponse('Server configuration error', { status: 500 })
+  }
+
+  if (!webhookUrl) {
+    console.error('NEXT_PUBLIC_URL not configured')
     return new NextResponse('Server configuration error', { status: 500 })
   }
 
@@ -28,7 +34,7 @@ export async function POST(request: NextRequest) {
   const params = Object.fromEntries(new URLSearchParams(body))
 
   // Validate webhook signature using Twilio SDK
-  const url = `${process.env.NEXT_PUBLIC_URL}/api/sms`
+  const url = `${webhookUrl}/api/sms`
   const isValid = twilio.validateRequest(authToken, signature, url, params)
 
   if (!isValid) {
