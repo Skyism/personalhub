@@ -19,7 +19,7 @@ The ability to text an expense and instantly see it reflected in the dashboard -
 - [ ] Modular architecture with feature-based folder structure supporting Finance, Skincare, and Fitness modules
 - [ ] Finance module: Dashboard showing Total Monthly Budget vs. Spent Amount with category breakdowns
 - [ ] Finance module: Transaction list with manual entry interface
-- [ ] Finance module: SMS integration via Twilio - text "amount category note" to log expenses
+- [ ] Finance module: SMS integration via Twilio - text "amount note" to log expenses (categories assigned later in UI)
 - [ ] Finance module: Analytics and charts for spending visualization (category breakdowns, trends)
 - [ ] Mobile-friendly UI optimized for on-the-go expense logging
 - [ ] Supabase backend with Postgres database for transactions and budget data

@@ -11,7 +11,7 @@ Researched the Twilio ecosystem for implementing SMS-based expense logging via w
 
 Key finding: Don't hand-roll webhook signature validation or security measures. Twilio provides battle-tested validation via `twilio.validateRequest()` that handles HMAC-SHA1 signature verification. Custom implementations miss edge cases (evolving parameters, URL encoding quirks, protocol changes).
 
-For text parsing, the "amount category note" format is simple enough for regex extraction rather than NLP libraries. The constraint is controlled input (users texting their own expenses) not adversarial/noisy data, making heavyweight NLP overkill.
+For text parsing, the "amount note" format is simple enough for regex extraction rather than NLP libraries. Categories are assigned later in the UI, not via SMS. The constraint is controlled input (users texting their own expenses) not adversarial/noisy data, making heavyweight NLP overkill.
 
 **Primary recommendation:** Use Twilio SDK webhook validation + Next.js Route Handler + regex parsing. Implement idempotency via MessageSid tracking. Keep responses under 15 seconds (Twilio timeout).
 </research_summary>
@@ -33,7 +33,7 @@ For text parsing, the "amount category note" format is simple enough for regex e
 ### Alternatives Considered
 | Instead of | Could Use | Tradeoff |
 |------------|-----------|----------|
-| Regex parsing | NLP libraries (natural, compromise) | NLP adds complexity for simple "amount category note" format |
+| Regex parsing | NLP libraries (natural, compromise) | NLP adds complexity for simple "amount note" format |
 | Twilio SDK | Custom HMAC-SHA1 | Custom validation misses edge cases, Twilio recommends SDK |
 | Route Handlers | Pages Router API Routes | App Router is current standard, simpler body handling |
 
@@ -124,29 +124,24 @@ await supabase.from('transactions').insert({
 ```
 
 ### Pattern 3: Regex Text Parsing
-**What:** Extract amount, category, note from free-form SMS text
+**What:** Extract amount and note from free-form SMS text (categories assigned later in UI)
 **When to use:** Controlled input format (user's own expenses, not adversarial)
 **Example:**
 ```typescript
 // lib/twilio/parser.ts
 export function parseSMS(body: string): {
   amount: number | null
-  category: string | null
   note: string | null
 } {
   // Extract amount: $XX.XX or XX.XX or XX
-  const amountMatch = body.match(/\$?(\d+(?:\.\d{2})?)/)
+  const amountMatch = body.match(/\$?(\d+(?:\.\d{1,2})?)/)
   const amount = amountMatch ? parseFloat(amountMatch[1]) : null
 
-  // Extract category: first word after amount
-  const remainingText = body.replace(/\$?\d+(?:\.\d{2})?/, '').trim()
-  const words = remainingText.split(/\s+/)
-  const category = words[0] || null
+  // Extract note: everything after amount
+  const remainingText = body.replace(/\$?\d+(?:\.\d{1,2})?/, '').trim()
+  const note = remainingText || null
 
-  // Extract note: everything after category
-  const note = words.slice(1).join(' ') || null
-
-  return { amount, category, note }
+  return { amount, note }
 }
 ```
 
@@ -154,7 +149,7 @@ export function parseSMS(body: string): {
 - **Custom signature validation:** Twilio's implementation handles edge cases (URL encoding, parameter ordering, protocol changes)
 - **Slow processing in webhook:** Twilio times out after 15 seconds. Offload heavy work to background jobs.
 - **Not checking MessageSid:** Twilio retries on failure, leading to duplicate transactions
-- **Using NLP for simple parsing:** Regex is sufficient for "amount category note" format
+- **Using NLP for simple parsing:** Regex is sufficient for "amount note" format
 </architecture_patterns>
 
 <dont_hand_roll>
@@ -165,7 +160,7 @@ export function parseSMS(body: string): {
 | Webhook signature validation | Custom HMAC-SHA1 implementation | twilio.validateRequest() | Parameters evolve without notice, protocol edge cases |
 | Phone number formatting | String manipulation | Twilio SDK phone utilities | International formats, validation, normalization |
 | SMS sending | Raw HTTP requests | Twilio SDK client.messages.create() | Handles auth, retries, error codes |
-| Complex text parsing | Regex for flexible input | Keep regex simple OR use NLP library | For "amount category note" format, regex works. For truly flexible input, use NLP. |
+| Complex text parsing | Regex for flexible input | Keep regex simple OR use NLP library | For "amount note" format, regex works. For truly flexible input, use NLP. |
 | Idempotency | Time-based deduplication | MessageSid database constraint | MessageSid is unique per message, guaranteed by Twilio |
 
 **Key insight:** Twilio's webhook security is non-trivial. The signature includes the exact URL (protocol, domain, path, query params) and all POST parameters in sorted order. Custom implementations break when Twilio adds parameters or when proxies/load balancers modify URLs. Use the SDK.
@@ -243,12 +238,12 @@ export async function POST(request: NextRequest) {
   const { MessageSid, From, Body: smsBody } = params
 
   // Parse SMS text
-  const { amount, category, note } = parseSMS(smsBody)
+  const { amount, note } = parseSMS(smsBody)
 
   if (!amount) {
     // Invalid format - optionally send error SMS back
     return new NextResponse(
-      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee lunch"</Message></Response>',
+      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee at starbucks"</Message></Response>',
       { headers: { 'Content-Type': 'text/xml' } }
     )
   }
@@ -268,11 +263,11 @@ export async function POST(request: NextRequest) {
     })
   }
 
-  // Create transaction
+  // Create transaction (category assigned later in UI)
   await supabase.from('transactions').insert({
     user_id: TEMP_USER_ID,
     amount,
-    category_id: null, // TODO: match category string to category_id
+    category_id: null, // Categories assigned later in UI
     note,
     transaction_date: new Date().toISOString(),
     source: 'sms',
@@ -293,7 +288,6 @@ export async function POST(request: NextRequest) {
 // Source: Regex patterns from research + practical constraints
 export interface ParsedSMS {
   amount: number | null
-  category: string | null
   note: string | null
 }
 
@@ -305,33 +299,25 @@ export function parseSMS(body: string): ParsedSMS {
   const amountMatch = trimmed.match(/\$?(\d+(?:\.\d{1,2})?)/)
 
   if (!amountMatch) {
-    return { amount: null, category: null, note: null }
+    return { amount: null, note: null }
   }
 
   const amount = parseFloat(amountMatch[1])
 
-  // Extract remaining text after amount
+  // Extract remaining text after amount as note
   const remainingText = trimmed
     .replace(amountMatch[0], '')
     .trim()
 
-  if (!remainingText) {
-    // Just amount, no category or note
-    return { amount, category: null, note: null }
-  }
+  const note = remainingText || null
 
-  // Split remaining text: first word is category, rest is note
-  const words = remainingText.split(/\s+/)
-  const category = words[0] || null
-  const note = words.slice(1).join(' ') || null
-
-  return { amount, category, note }
+  return { amount, note }
 }
 
 // Examples:
-// "$25 coffee" -> { amount: 25, category: "coffee", note: null }
-// "25.50 groceries trader joes" -> { amount: 25.50, category: "groceries", note: "trader joes" }
-// "100" -> { amount: 100, category: null, note: null }
+// "$25 coffee at starbucks" -> { amount: 25, note: "coffee at starbucks" }
+// "25.50 trader joes" -> { amount: 25.50, note: "trader joes" }
+// "100" -> { amount: 100, note: null }
 ```
 
 ### Idempotency Check
@@ -375,17 +361,12 @@ export async function checkIdempotency(messageSid: string): Promise<boolean> {
 <open_questions>
 ## Open Questions
 
-1. **Category string-to-ID matching**
-   - What we know: SMS has category as text string, database needs category_id (FK)
-   - What's unclear: Best matching strategy (exact match? fuzzy? default to uncategorized?)
-   - Recommendation: Exact case-insensitive match during planning, optionally add fuzzy matching as enhancement
-
-2. **Budget assignment from SMS**
+1. **Budget assignment from SMS**
    - What we know: Transactions require budget_id, SMS doesn't specify budget
    - What's unclear: How to determine which budget for this transaction
    - Recommendation: Use current month's budget (one budget per month assumption), or default to most recent budget
 
-3. **Error handling for users**
+2. **Error handling for users**
    - What we know: Can send TwiML <Message> response back to user
    - What's unclear: Should we send confirmation SMS on success? Error SMS on failure?
    - Recommendation: Silent on success (users check app), error SMS only on parse failure ("Could not parse amount")
@@ -428,8 +409,9 @@ export async function checkIdempotency(messageSid: string): Promise<boolean> {
 **Research date:** 2026-01-12
 **Valid until:** 2026-02-12 (30 days - stable ecosystem, but Twilio occasionally adds parameters)
 
-**Key decision:**
-- **Regex vs NLP:** Regex chosen for "amount category note" format. Format is constrained (user's own expenses), not adversarial. Regex is simpler, faster, no dependencies. If input becomes more flexible in future, consider NLP library.
+**Key decisions:**
+- **Regex vs NLP:** Regex chosen for "amount note" format. Format is constrained (user's own expenses), not adversarial. Regex is simpler, faster, no dependencies. If input becomes more flexible in future, consider NLP library.
+- **Category assignment:** Categories assigned later in UI, not via SMS. Simpler user experience, avoids category name matching issues.
 </metadata>
 
 ---

@@ -67,7 +67,7 @@ Plans:
 - [x] **04-02-PLAN.md** - Manual Transaction Entry (entry form with category assignment) - Completed 2026-01-12
 
 ### Phase 5: SMS Integration
-**Goal**: Integrate Twilio webhook to parse "amount category note" SMS messages and create transactions
+**Goal**: Integrate Twilio webhook to parse "amount note" SMS messages and create uncategorized transactions (categories assigned later in UI)
 **Depends on**: Phase 4
 **Research**: Likely (external API integration)
 **Research topics**: Twilio webhook setup with Next.js API routes, SMS text parsing strategies for flexible input, webhook authentication and security best practices
