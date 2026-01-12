@@ -17,7 +17,7 @@ None
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Next.js project setup with modular architecture
-- [ ] **Phase 2: Supabase Backend** - Database schema and API integration
+- [x] **Phase 2: Supabase Backend** - Database schema and API integration
 - [ ] **Phase 3: Budget Management** - Budget creation and category management UI
 - [ ] **Phase 4: Transaction System** - Manual transaction entry and display
 - [ ] **Phase 5: SMS Integration** - Twilio webhook for SMS expense logging
@@ -40,11 +40,11 @@ Plans:
 **Depends on**: Phase 1
 **Research**: Complete (DISCOVERY.md created 2026-01-11)
 **Research topics**: Supabase client setup in Next.js, schema design for budgets/transactions/categories with proper relationships, Row Level Security policies for single-user app
-**Plans**: 1/2 complete
+**Plans**: 2/2 complete
 
 Plans:
 - [x] **02-01-PLAN.md** - Supabase Client Setup (browser + server clients with SSR support) - Completed 2026-01-11
-- [ ] **02-02-PLAN.md** - Database Schema Migration (budgets, transactions, categories tables with RLS policies)
+- [x] **02-02-PLAN.md** - Database Schema Migration (budgets, transactions, categories tables with RLS policies) - Completed 2026-01-11
 
 ### Phase 3: Budget Management
 **Goal**: Build UI for creating monthly budgets with total and per-category allocations
@@ -101,7 +101,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete | 2026-01-11 |
-| 2. Supabase Backend | 1/2 | In progress | - |
+| 2. Supabase Backend | 2/2 | Complete | 2026-01-11 |
 | 3. Budget Management | 0/TBD | Not started | - |
 | 4. Transaction System | 0/TBD | Not started | - |
 | 5. SMS Integration | 0/TBD | Not started | - |
