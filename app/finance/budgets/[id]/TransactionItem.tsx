@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { deleteTransaction } from '../transactions/actions'
+import { useState, useTransition } from 'react'
+import { deleteTransaction, updateTransactionCategory } from '../transactions/actions'
 import type { Tables } from '@/lib/database.types'
 
 type TransactionWithCategory = Tables<'transactions'> & {
@@ -11,6 +11,7 @@ type TransactionWithCategory = Tables<'transactions'> & {
 type TransactionItemProps = {
   transaction: TransactionWithCategory
   budgetId: number
+  categories: Tables<'categories'>[]
 }
 
 function formatCurrency(amount: number): string {
@@ -28,9 +29,12 @@ function formatTransactionDate(dateString: string): string {
   })
 }
 
-export default function TransactionItem({ transaction, budgetId }: TransactionItemProps) {
+export default function TransactionItem({ transaction, budgetId, categories }: TransactionItemProps) {
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(transaction.category_id)
   const [error, setError] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this transaction? This action cannot be undone.')) {
@@ -55,25 +59,108 @@ export default function TransactionItem({ transaction, budgetId }: TransactionIt
     }
   }
 
+  const handleEditClick = () => {
+    setIsEditing(true)
+    setError(null)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setSelectedCategory(transaction.category_id)
+    setError(null)
+  }
+
+  const handleSaveCategory = () => {
+    startTransition(async () => {
+      const result = await updateTransactionCategory(transaction.id, selectedCategory)
+
+      if (result.success) {
+        setIsEditing(false)
+        setError(null)
+      } else {
+        setError(result.error || 'Failed to update category')
+      }
+    })
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSaveCategory()
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      handleCancelEdit()
+    }
+  }
+
   return (
-    <div className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+    <div className={`group border rounded-lg p-4 transition-colors ${
+      isEditing ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+    }`}>
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            {transaction.categories ? (
-              <span
-                className="px-2 py-1 rounded text-xs font-medium"
-                style={{
-                  backgroundColor: transaction.categories.color ? `${transaction.categories.color}20` : '#E5E7EB',
-                  color: transaction.categories.color || '#6B7280'
-                }}
-              >
-                {transaction.categories.name}
-              </span>
+            {isEditing ? (
+              <div className="flex items-center gap-2">
+                <select
+                  value={selectedCategory === null ? '' : selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value === '' ? null : parseInt(e.target.value))}
+                  onKeyDown={handleKeyDown}
+                  className="px-2 py-1 rounded text-xs font-medium border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={isPending}
+                  autoFocus
+                  aria-label="Select category"
+                >
+                  <option value="">Uncategorized</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={handleSaveCategory}
+                  disabled={isPending}
+                  className="px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {isPending ? 'Saving...' : 'Save'}
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  disabled={isPending}
+                  className="px-2 py-1 text-xs font-medium text-gray-700 hover:text-gray-900 disabled:text-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
             ) : (
-              <span className="px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-600">
-                Uncategorized
-              </span>
+              <>
+                {transaction.categories ? (
+                  <span
+                    className="px-2 py-1 rounded text-xs font-medium"
+                    style={{
+                      backgroundColor: transaction.categories.color ? `${transaction.categories.color}20` : '#E5E7EB',
+                      color: transaction.categories.color || '#6B7280'
+                    }}
+                  >
+                    {transaction.categories.name}
+                  </span>
+                ) : (
+                  <span className="px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-600">
+                    Uncategorized
+                  </span>
+                )}
+                <button
+                  onClick={handleEditClick}
+                  className="opacity-0 group-hover:opacity-100 hover:opacity-100 text-gray-400 hover:text-blue-600 transition-opacity"
+                  aria-label="Edit category"
+                  title="Edit category"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </button>
+              </>
             )}
             <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">
               {transaction.source}
@@ -93,19 +180,21 @@ export default function TransactionItem({ transaction, budgetId }: TransactionIt
         </div>
       </div>
 
-      <div className="flex justify-end gap-2 mt-3 pt-3 border-t border-gray-100">
-        <button
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className={`text-sm font-medium transition-colors ${
-            isDeleting
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-red-600 hover:text-red-700'
-          }`}
-        >
-          {isDeleting ? 'Deleting...' : 'Delete'}
-        </button>
-      </div>
+      {!isEditing && (
+        <div className="flex justify-end gap-2 mt-3 pt-3 border-t border-gray-100">
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className={`text-sm font-medium transition-colors ${
+              isDeleting
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-red-600 hover:text-red-700'
+            }`}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className="mt-2 p-2 bg-red-100 text-red-700 text-xs rounded">

@@ -345,6 +345,7 @@ export default async function BudgetDetailPage({ params }: PageProps) {
                           key={transaction.id}
                           transaction={transaction}
                           budgetId={budgetId}
+                          categories={categories || []}
                         />
                       ))}
                     </div>
