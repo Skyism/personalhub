@@ -175,7 +175,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const dailyData: DailySpending[] = Object.entries(dailySpendingMap)
     .map(([date, amount]) => ({
       date,
-      amount,
+      amount: amount as number,
       formattedDate: new Date(date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric'
