@@ -60,7 +60,7 @@ export default function SpendingTrendsChart({ data, budgetTotal }: SpendingTrend
           tick={{ fontSize: 12 }}
         />
         <Tooltip
-          formatter={(value: number) => formatCurrency(value)}
+          formatter={(value: any) => formatCurrency(value as number)}
           labelFormatter={(label) => label}
         />
         <Legend />
