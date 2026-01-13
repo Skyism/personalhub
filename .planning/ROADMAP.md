@@ -79,12 +79,13 @@ Plans:
 ### Phase 6: Analytics Dashboard
 **Goal**: Create spending visualization with category breakdowns, trends, and budget vs actual charts
 **Depends on**: Phase 4 (can run parallel to Phase 5 if needed)
-**Research**: Likely (charting library selection)
+**Research**: Complete (DISCOVERY.md created 2026-01-13)
 **Research topics**: Chart.js vs Recharts vs Tremor for React/Next.js, efficient aggregation queries for spending data in Supabase
-**Plans**: TBD
+**Plans**: 1/2 complete
 
 Plans:
-- TBD (determined during phase planning)
+- [x] **06-01-PLAN.md** - Chart Foundation and Category Breakdown (Recharts setup, responsive wrapper, pie chart) - Completed 2026-01-13
+- [ ] **06-02-PLAN.md** - Spending Trends and Budget vs Actual (line/bar charts for trends and comparison)
 
 ### Phase 7: Mobile Polish
 **Goal**: Optimize mobile experience with responsive layouts, touch targets, and performance tuning
@@ -107,5 +108,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Budget Management | 2/2 | Complete | 2026-01-12 |
 | 4. Transaction System | 2/2 | Complete | 2026-01-12 |
 | 5. SMS Integration | 2/2 | Complete | 2026-01-13 |
-| 6. Analytics Dashboard | 0/TBD | Not started | - |
+| 6. Analytics Dashboard | 1/2 | In progress | - |
 | 7. Mobile Polish | 0/TBD | Not started | - |
