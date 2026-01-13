@@ -135,28 +135,30 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
               </div>
             ) : (
               <>
-                {transaction.categories ? (
-                  <span
-                    className="px-2 py-1 rounded text-xs font-medium"
-                    style={{
-                      backgroundColor: transaction.categories.color ? `${transaction.categories.color}20` : '#E5E7EB',
-                      color: transaction.categories.color || '#6B7280'
-                    }}
-                  >
-                    {transaction.categories.name}
-                  </span>
-                ) : (
-                  <span className="px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-600">
-                    Uncategorized
-                  </span>
-                )}
                 <button
                   onClick={handleEditClick}
-                  className="opacity-0 group-hover:opacity-100 hover:opacity-100 text-gray-400 hover:text-blue-600 transition-opacity"
+                  className="flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-colors hover:bg-gray-100 border border-transparent hover:border-gray-300"
                   aria-label="Edit category"
-                  title="Edit category"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {transaction.categories ? (
+                    <span
+                      className="flex items-center gap-1"
+                      style={{
+                        color: transaction.categories.color || '#6B7280'
+                      }}
+                    >
+                      <span
+                        className="w-2 h-2 rounded-full"
+                        style={{
+                          backgroundColor: transaction.categories.color || '#9CA3AF'
+                        }}
+                      />
+                      {transaction.categories.name}
+                    </span>
+                  ) : (
+                    <span className="text-gray-600">Uncategorized</span>
+                  )}
+                  <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                   </svg>
                 </button>
