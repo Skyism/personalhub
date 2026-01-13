@@ -2,7 +2,7 @@
 
 ## Overview
 
-Personal Nexus delivers a modular personal dashboard with SMS-first expense tracking. The journey starts with foundational Next.js architecture supporting future modules, builds the Supabase backend and budget management core, implements manual transaction entry, adds the critical SMS logging integration via Twilio, provides spending analytics and visualization, and finishes with mobile-responsive polish for on-the-go usage.
+Personal Nexus delivers a modular personal dashboard with SMS-first expense tracking. The journey starts with foundational Next.js architecture supporting future modules, builds the Supabase backend and budget management core, implements manual transaction entry, adds the critical SMS logging integration via Twilio, provides spending analytics and visualization, finishes with mobile-responsive polish for on-the-go usage, and culminates with a distinctive UI overhaul that transforms the aesthetic into something memorable and delightful.
 
 ## Domain Expertise
 
@@ -23,6 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: SMS Integration** - Twilio webhook for SMS expense logging
 - [x] **Phase 6: Analytics Dashboard** - Charts and spending visualization
 - [ ] **Phase 7: Mobile Polish** - Mobile-responsive optimization and UX refinement
+- [ ] **Phase 8: UI Overhaul** - Distinctive design system with unique typography, motion, and aesthetics
 
 ## Phase Details
 
@@ -93,15 +94,35 @@ Plans:
 **Goal**: Optimize mobile experience with responsive layouts, touch targets, and performance tuning
 **Depends on**: Phases 5 and 6 (final polish after core features complete)
 **Research**: Unlikely (Tailwind responsive patterns)
+**Plans**: 3/3 planned
+
+Plans:
+- [ ] **07-01-PLAN.md** - Mobile Navigation and Touch Optimization (persistent bottom nav, viewport meta tags, 44px touch targets)
+- [ ] **07-02-PLAN.md** - Performance and Loading Optimization (loading.tsx, error.tsx, dynamic chart imports)
+- [ ] **07-03-PLAN.md** - Mobile Form and Input Optimization (inputMode, autoComplete, focus management, smooth scroll)
+
+### Phase 8: UI Overhaul
+**Goal**: Transform the application with a distinctive, creative design system that avoids generic AI aesthetics. Implement unique typography, cohesive color themes, motion design, and atmospheric backgrounds to create a memorable user experience.
+**Depends on**: Phase 7 (polish first, then transform)
+**Research**: Required (shadcn/ui components, unique font pairings, modern design systems, CSS animation libraries)
+**Research topics**: shadcn/ui integration patterns, distinctive Google Fonts alternatives, CSS gradient techniques, Framer Motion for React animations, design inspiration from IDE themes
 **Plans**: TBD
 
 Plans:
-- TBD (determined during phase planning)
+- TBD (run /gsd:plan-phase 8 to break down)
+
+**Design Principles:**
+- Typography: Unique, beautiful fonts (avoid Inter, Roboto, Arial, Space Grotesk)
+- Color: Cohesive themes with dominant colors and sharp accents, CSS variables
+- Motion: CSS animations + Framer Motion for high-impact moments, staggered reveals
+- Backgrounds: Layered gradients, geometric patterns, atmospheric depth
+- Components: shadcn/ui as foundation, customized with unique aesthetic
+- Minimalist but distinctive: Clean layouts with unexpected, delightful touches
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -111,4 +132,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 4. Transaction System | 2/2 | Complete | 2026-01-12 |
 | 5. SMS Integration | 2/2 | Complete | 2026-01-13 |
 | 6. Analytics Dashboard | 3/3 | Complete | 2026-01-13 |
-| 7. Mobile Polish | 0/TBD | Not started | - |
+| 7. Mobile Polish | 0/3 | Planned | - |
+| 8. UI Overhaul | 0/TBD | Not started | - |
