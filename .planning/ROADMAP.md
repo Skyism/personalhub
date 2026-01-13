@@ -19,8 +19,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Next.js project setup with modular architecture
 - [x] **Phase 2: Supabase Backend** - Database schema and API integration
 - [x] **Phase 3: Budget Management** - Budget creation and category management UI
-- [ ] **Phase 4: Transaction System** - Manual transaction entry and display
-- [ ] **Phase 5: SMS Integration** - Twilio webhook for SMS expense logging
+- [x] **Phase 4: Transaction System** - Manual transaction entry and display
+- [x] **Phase 5: SMS Integration** - Twilio webhook for SMS expense logging
 - [ ] **Phase 6: Analytics Dashboard** - Charts and spending visualization
 - [ ] **Phase 7: Mobile Polish** - Mobile-responsive optimization and UX refinement
 
@@ -69,11 +69,12 @@ Plans:
 ### Phase 5: SMS Integration
 **Goal**: Integrate Twilio webhook to parse "amount note" SMS messages and create uncategorized transactions (categories assigned later in UI)
 **Depends on**: Phase 4
-**Status**: In progress (1/2 plans complete)
+**Status**: Complete
+**Plans**: 2/2 complete
 
 Plans:
 - [x] **05-01-PLAN.md** - SMS Webhook Integration (Twilio webhook with text parsing and idempotent transaction creation) - Completed 2026-01-12
-- [ ] **05-02-PLAN.md** - Manual Transaction Categorization (UI for assigning categories to uncategorized transactions)
+- [x] **05-02-PLAN.md** - Manual Transaction Categorization (inline category editing with Server Actions) - Completed 2026-01-13
 
 ### Phase 6: Analytics Dashboard
 **Goal**: Create spending visualization with category breakdowns, trends, and budget vs actual charts
@@ -105,6 +106,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Supabase Backend | 2/2 | Complete | 2026-01-11 |
 | 3. Budget Management | 2/2 | Complete | 2026-01-12 |
 | 4. Transaction System | 2/2 | Complete | 2026-01-12 |
-| 5. SMS Integration | 0/TBD | Not started | - |
+| 5. SMS Integration | 2/2 | Complete | 2026-01-13 |
 | 6. Analytics Dashboard | 0/TBD | Not started | - |
 | 7. Mobile Polish | 0/TBD | Not started | - |
