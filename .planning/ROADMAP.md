@@ -81,11 +81,11 @@ Plans:
 **Depends on**: Phase 4 (can run parallel to Phase 5 if needed)
 **Research**: Complete (DISCOVERY.md created 2026-01-13)
 **Research topics**: Chart.js vs Recharts vs Tremor for React/Next.js, efficient aggregation queries for spending data in Supabase
-**Plans**: 1/3 complete
+**Plans**: 2/3 complete
 
 Plans:
 - [x] **06-01-PLAN.md** - Chart Foundation and Category Breakdown (Recharts setup, responsive wrapper, pie chart) - Completed 2026-01-13
-- [ ] **06-02-PLAN.md** - Spending Trends and Budget vs Actual (line/bar charts for trends and comparison)
+- [x] **06-02-PLAN.md** - Spending Trends and Budget vs Actual (line/bar charts for trends and comparison) - Completed 2026-01-13
 - [ ] **06-03-PLAN.md** - Analytics Dashboard Page (dedicated /finance/analytics route with all charts)
 
 ### Phase 7: Mobile Polish
@@ -109,5 +109,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Budget Management | 2/2 | Complete | 2026-01-12 |
 | 4. Transaction System | 2/2 | Complete | 2026-01-12 |
 | 5. SMS Integration | 2/2 | Complete | 2026-01-13 |
-| 6. Analytics Dashboard | 1/3 | In progress | - |
+| 6. Analytics Dashboard | 2/3 | In progress | - |
 | 7. Mobile Polish | 0/TBD | Not started | - |
