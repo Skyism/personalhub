@@ -24,16 +24,26 @@ export default function BudgetSelector({ budgets, selectedBudgetId }: BudgetSele
   }
 
   return (
-    <select
-      value={selectedBudgetId}
-      onChange={handleChange}
-      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
-    >
-      {budgets.map(budget => (
-        <option key={budget.id} value={budget.id}>
-          {formatMonth(budget.month)}
-        </option>
-      ))}
-    </select>
+    <div className="relative">
+      <select
+        value={selectedBudgetId}
+        onChange={handleChange}
+        className="appearance-none w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 text-base cursor-pointer"
+      >
+        {budgets.map(budget => (
+          <option key={budget.id} value={budget.id}>
+            {formatMonth(budget.month)}
+          </option>
+        ))}
+      </select>
+      <svg
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
   )
 }

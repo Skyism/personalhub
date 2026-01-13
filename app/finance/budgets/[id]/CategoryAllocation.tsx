@@ -14,6 +14,7 @@ interface CategoryAllocationProps {
   categories: Category[]
   allocations: CategoryAllocation[]
   totalBudget: number
+  isLoading?: boolean
 }
 
 function formatCurrency(amount: number): string {
@@ -28,6 +29,7 @@ export default function CategoryAllocation({
   categories,
   allocations,
   totalBudget,
+  isLoading = false,
 }: CategoryAllocationProps) {
   const [isAdding, setIsAdding] = useState(false)
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
@@ -70,6 +72,33 @@ export default function CategoryAllocation({
     if (!result.success) {
       alert(result.error || 'Failed to remove allocation')
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <div className="h-7 w-48 bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-64 bg-gray-200 rounded animate-pulse mt-2" />
+          </div>
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 rounded-full bg-gray-200 animate-pulse" />
+                <div className="h-5 w-24 bg-gray-200 rounded animate-pulse" />
+              </div>
+              <div className="h-6 w-20 bg-gray-200 rounded animate-pulse" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -159,14 +188,27 @@ export default function CategoryAllocation({
       )}
 
       {allocations.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          <p>No category allocations yet.</p>
+        <div className="text-center py-12 text-gray-500">
+          <svg
+            className="w-16 h-16 mx-auto mb-4 text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+            />
+          </svg>
+          <p className="text-lg font-medium text-gray-700 mb-1">No category allocations yet</p>
           <p className="text-sm mt-2">
             {availableCategories.length > 0
-              ? 'Click "Add Allocation" to assign budget to categories.'
+              ? 'Click "Add Allocation" above to assign budget to categories.'
               : 'Create categories first at '}
             {availableCategories.length === 0 && (
-              <a href="/finance/categories" className="text-blue-600 hover:underline">
+              <a href="/finance/categories" className="text-blue-600 hover:underline font-medium">
                 /finance/categories
               </a>
             )}

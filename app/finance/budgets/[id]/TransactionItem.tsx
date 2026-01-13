@@ -137,7 +137,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
               <>
                 <button
                   onClick={handleEditClick}
-                  className="flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-colors hover:bg-gray-100 border border-transparent hover:border-gray-300"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors hover:bg-gray-100 border border-transparent hover:border-gray-300 active:bg-gray-200"
                   aria-label="Edit category"
                 >
                   {transaction.categories ? (
@@ -187,10 +187,10 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className={`text-sm font-medium transition-colors ${
+            className={`px-4 py-2 text-sm font-medium transition-colors rounded border ${
               isDeleting
-                ? 'text-gray-400 cursor-not-allowed'
-                : 'text-red-600 hover:text-red-700'
+                ? 'text-gray-400 cursor-not-allowed border-gray-300 bg-gray-100'
+                : 'text-red-600 hover:text-red-700 border-red-300 hover:bg-red-50 active:bg-red-100'
             }`}
           >
             {isDeleting ? 'Deleting...' : 'Delete'}
