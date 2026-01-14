@@ -1,24 +1,13 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import type { Tables } from '@/lib/database.types'
+import BudgetList from './BudgetList'
+import { Card } from '@/components/ui/card'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
 
 type Budget = Tables<'budgets'>
-
-function formatMonth(monthString: string): string {
-  const [year, month] = monthString.split('-')
-  const date = new Date(parseInt(year), parseInt(month) - 1, 1)
-  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-}
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount)
-}
 
 export default async function BudgetsPage() {
   const supabase = await createClient()
@@ -52,7 +41,7 @@ export default async function BudgetsPage() {
         </div>
 
         {!hasBudgets ? (
-          <div className="bg-card rounded-lg shadow p-8 text-center border border-border">
+          <Card className="bg-muted/50 border-border p-8 text-center">
             <div className="max-w-md mx-auto">
               <h2 className="text-xl font-semibold text-foreground mb-2">
                 No budgets yet
@@ -67,34 +56,9 @@ export default async function BudgetsPage() {
                 Create Your First Budget
               </Link>
             </div>
-          </div>
+          </Card>
         ) : (
-          <div className="grid gap-4">
-            {budgets.map((budget) => (
-              <Link
-                key={budget.id}
-                href={`/finance/budgets/${budget.id}`}
-                className="block bg-card rounded-lg shadow hover:shadow-md transition-shadow p-6 border border-border"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h2 className="text-xl font-semibold text-foreground">
-                      {formatMonth(budget.month)}
-                    </h2>
-                    <p className="text-muted-foreground text-sm mt-1">
-                      Created {new Date(budget.created_at || '').toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-foreground font-mono">
-                      {formatCurrency(budget.total_budget)}
-                    </p>
-                    <p className="text-muted-foreground text-sm">Total Budget</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <BudgetList budgets={budgets} />
         )}
       </div>
     </div>

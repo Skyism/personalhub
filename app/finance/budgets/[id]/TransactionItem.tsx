@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { motion } from 'motion/react'
 import { deleteTransaction, updateTransactionCategory } from '../transactions/actions'
 import type { Tables } from '@/lib/database.types'
 
@@ -94,9 +95,13 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
   }
 
   return (
-    <div className={`group border rounded-lg p-4 transition-colors ${
-      isEditing ? 'border-blue-400 bg-blue-50' : 'border-border hover:border-border'
-    }`}>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className={`group bg-muted border border-border rounded-lg p-4 transition-colors ${
+        isEditing ? 'border-primary bg-primary/5' : 'hover:bg-muted/80'
+      }`}>
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
@@ -121,14 +126,14 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
                 <button
                   onClick={handleSaveCategory}
                   disabled={isPending}
-                  className="px-2 py-1 text-xs font-medium bg-primary text-white rounded hover:bg-primary/90 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="px-2 py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:bg-muted disabled:cursor-not-allowed"
                 >
                   {isPending ? 'Saving...' : 'Save'}
                 </button>
                 <button
                   onClick={handleCancelEdit}
                   disabled={isPending}
-                  className="px-2 py-1 text-xs font-medium text-card-foreground hover:text-foreground disabled:text-gray-400"
+                  className="px-2 py-1 text-xs font-medium text-foreground hover:text-accent-foreground disabled:text-muted-foreground"
                 >
                   Cancel
                 </button>
@@ -164,7 +169,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
                 </button>
               </>
             )}
-            <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">
+            <span className="px-2 py-1 rounded text-xs font-medium bg-accent/20 text-accent-foreground">
               {transaction.source}
             </span>
           </div>
@@ -183,14 +188,14 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
       </div>
 
       {!isEditing && (
-        <div className="flex justify-end gap-2 mt-3 pt-3 border-t border-gray-100">
+        <div className="flex justify-end gap-2 mt-3 pt-3 border-t border-border">
           <button
             onClick={handleDelete}
             disabled={isDeleting}
             className={`px-4 py-2 text-sm font-medium transition-colors rounded border ${
               isDeleting
-                ? 'text-gray-400 cursor-not-allowed border-border bg-muted'
-                : 'text-destructive hover:text-red-700 border-red-300 hover:bg-red-50 active:bg-red-100'
+                ? 'text-muted-foreground cursor-not-allowed border-border bg-muted'
+                : 'text-destructive hover:text-destructive/80 border-destructive/30 hover:bg-destructive/10 active:bg-destructive/20'
             }`}
           >
             {isDeleting ? 'Deleting...' : 'Delete'}
@@ -199,10 +204,10 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
       )}
 
       {error && (
-        <div className="mt-2 p-2 bg-red-100 text-red-700 text-xs rounded">
+        <div className="mt-2 p-2 bg-destructive/10 text-destructive text-xs rounded">
           {error}
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }

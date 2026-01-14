@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { Tables } from '@/lib/database.types'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import CategoryAllocation from './CategoryAllocation'
 import TransactionForm from './TransactionForm'
 import TransactionItem from './TransactionItem'
@@ -180,55 +181,60 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           </Link>
         </div>
 
-        <div className="bg-card rounded-lg shadow p-6 mb-6">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                {formatMonth(budget.month)}
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Created {budget.created_at ? formatDate(budget.created_at) : 'Unknown'}
-              </p>
+        <Card className="bg-muted/50 border-border mb-6">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">
+                  {formatMonth(budget.month)}
+                </h1>
+                <p className="text-muted-foreground mt-1">
+                  Created {budget.created_at ? formatDate(budget.created_at) : 'Unknown'}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold text-foreground font-mono">
+                  {formatCurrency(budget.total_budget)}
+                </p>
+                <p className="text-muted-foreground text-sm">Total Budget</p>
+              </div>
             </div>
-            <div className="text-right">
-              <p className="text-3xl font-bold text-foreground">
-                {formatCurrency(budget.total_budget)}
-              </p>
-              <p className="text-muted-foreground text-sm">Total Budget</p>
+
+            <div className="flex gap-3 pt-4 border-t border-border">
+              {/* TODO: Implement edit functionality in future plan */}
+              <button
+                disabled
+                className="flex-1 bg-muted text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
+                title="Edit functionality coming soon"
+              >
+                Edit Budget
+              </button>
+              {/* TODO: Implement delete functionality in future plan */}
+              <button
+                disabled
+                className="flex-1 bg-muted text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
+                title="Delete functionality coming soon"
+              >
+                Delete Budget
+              </button>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="flex gap-3 pt-4 border-t border-border">
-            {/* TODO: Implement edit functionality in future plan */}
-            <button
-              disabled
-              className="flex-1 bg-gray-200 text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
-              title="Edit functionality coming soon"
-            >
-              Edit Budget
-            </button>
-            {/* TODO: Implement delete functionality in future plan */}
-            <button
-              disabled
-              className="flex-1 bg-gray-200 text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
-              title="Delete functionality coming soon"
-            >
-              Delete Budget
-            </button>
-          </div>
-        </div>
+        <Card className="bg-muted/50 border-border">
+          <CardContent className="pt-6">
+            <CategoryAllocation
+              budgetId={budgetId}
+              categories={categories || []}
+              allocations={allocations || []}
+              totalBudget={budget.total_budget}
+            />
+          </CardContent>
+        </Card>
 
-        <div className="bg-card rounded-lg shadow p-6">
-          <CategoryAllocation
-            budgetId={budgetId}
-            categories={categories || []}
-            allocations={allocations || []}
-            totalBudget={budget.total_budget}
-          />
-        </div>
-
-        <div className="bg-card rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Spending Summary</h2>
+        <Card className="bg-muted/50 border-border mt-6">
+          <CardContent className="pt-6">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Spending Summary</h2>
 
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
@@ -258,12 +264,12 @@ export default async function BudgetDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+            <div className="w-full bg-muted rounded-full h-4 overflow-hidden">
               <div
                 className={`h-full transition-all ${
-                  statusColor === 'red' ? 'bg-red-500' :
+                  statusColor === 'red' ? 'bg-destructive' :
                   statusColor === 'yellow' ? 'bg-yellow-500' :
-                  'bg-green-500'
+                  'bg-primary'
                 }`}
                 style={{ width: `${Math.min(spentPercentage, 100)}%` }}
               />
@@ -304,12 +310,12 @@ export default async function BudgetDetailPage({ params }: PageProps) {
                           </p>
                         </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                         <div
                           className={`h-full transition-all ${
-                            categoryStatusColor === 'red' ? 'bg-red-500' :
+                            categoryStatusColor === 'red' ? 'bg-destructive' :
                             categoryStatusColor === 'yellow' ? 'bg-yellow-500' :
-                            'bg-green-500'
+                            'bg-accent'
                           }`}
                           style={{ width: `${Math.min(category.percentage, 100)}%` }}
                         />
@@ -320,10 +326,12 @@ export default async function BudgetDetailPage({ params }: PageProps) {
               </div>
             </div>
           )}
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-card rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Transactions</h2>
+        <Card className="bg-muted/50 border-border mt-6">
+          <CardContent className="pt-6">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Transactions</h2>
 
           <TransactionForm budgetId={budgetId} categories={categories || []} />
 
@@ -354,7 +362,8 @@ export default async function BudgetDetailPage({ params }: PageProps) {
               })}
             </div>
           )}
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
