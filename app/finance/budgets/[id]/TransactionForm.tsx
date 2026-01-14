@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, useRef } from 'react'
 import { createTransaction } from '../transactions/actions'
 import type { Tables } from '@/lib/database.types'
 
@@ -16,6 +16,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [message, setMessage] = useState<string | null>(null)
+  const amountInputRef = useRef<HTMLInputElement>(null)
 
   // Form state
   const [amount, setAmount] = useState('')
@@ -75,17 +76,19 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
       const result = await createTransaction(formData, budgetId)
 
       if (result.success) {
-        // Reset form and collapse
+        // Reset form
         setAmount('')
         setCategoryId('')
         setNote('')
         setDate(new Date().toISOString().split('T')[0])
         setErrors({})
-        setIsExpanded(false)
         setMessage('Transaction added successfully!')
 
         // Clear success message after 3 seconds
         setTimeout(() => setMessage(null), 3000)
+
+        // Keep form expanded and refocus amount input for quick entry
+        amountInputRef.current?.focus()
       } else {
         setErrors({ submit: result.error || 'Failed to create transaction' })
       }
@@ -116,7 +119,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
   }
 
   return (
-    <div className="mb-6 bg-white border border-gray-200 rounded-lg p-6">
+    <div className="mb-6 bg-white border border-gray-200 rounded-lg p-6 scroll-mt-4">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-900">Add Transaction</h3>
         <button
@@ -139,17 +142,20 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             Amount *
           </label>
           <input
+            ref={amountInputRef}
             type="number"
             id="amount"
             name="amount"
             step="0.01"
             min="0"
+            inputMode="decimal"
+            autoComplete="transaction-amount"
             value={amount}
             onChange={(e) => {
               setAmount(e.target.value)
               setErrors({ ...errors, amount: '' })
             }}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100 ${
               errors.amount ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="0.00"
@@ -171,7 +177,8 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             name="category_id"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            autoComplete="off"
+            className="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
             disabled={isSubmitting}
           >
             <option value="">Uncategorized</option>
@@ -193,11 +200,13 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             id="date"
             name="date"
             value={date}
+            max={new Date().toISOString().split('T')[0]}
+            autoComplete="bday"
             onChange={(e) => {
               setDate(e.target.value)
               setErrors({ ...errors, date: '' })
             }}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100 ${
               errors.date ? 'border-red-500' : 'border-gray-300'
             }`}
             required
@@ -221,9 +230,11 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
               setNote(e.target.value)
               setErrors({ ...errors, note: '' })
             }}
+            inputMode="text"
+            autoComplete="off"
             maxLength={500}
             rows={3}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100 ${
               errors.note ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="Add a note about this transaction..."
