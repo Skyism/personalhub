@@ -106,7 +106,7 @@ export default function NewBudgetPage() {
                 disabled={isSubmitting}
                 className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Creating...' : 'Create Budget'}
+                {isSubmitting ? 'Creating Budget...' : 'Create Budget'}
               </button>
               <Link
                 href="/finance/budgets"
