@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { createCategory } from './actions'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 const COLOR_OPTIONS = [
   { value: '#EF4444', label: 'Red', class: 'bg-red-500' },
@@ -47,24 +49,24 @@ export default function CreateCategoryForm() {
 
   if (!isOpen) {
     return (
-      <button
+      <Button
         onClick={() => setIsOpen(true)}
-        className="w-full bg-primary text-white px-4 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium"
+        className="w-full"
       >
         + Create Category
-      </button>
+      </Button>
     )
   }
 
   return (
-    <div className="bg-card rounded-lg shadow p-6 border border-border">
+    <div className="bg-muted/50 backdrop-blur-sm rounded-lg shadow p-6 border border-border">
       <h2 className="text-lg font-semibold text-foreground mb-4">Create New Category</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-card-foreground mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
             Category Name
           </label>
-          <input
+          <Input
             id="name"
             type="text"
             value={name}
@@ -72,13 +74,12 @@ export default function CreateCategoryForm() {
             inputMode="text"
             autoComplete="off"
             placeholder="e.g., Food, Transport, Entertainment"
-            className="w-full px-3 py-2 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted"
             autoFocus
             disabled={isSubmitting}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-card-foreground mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Color
           </label>
           <div className="grid grid-cols-4 gap-2">
@@ -89,7 +90,7 @@ export default function CreateCategoryForm() {
                 onClick={() => setColor(option.value)}
                 disabled={isSubmitting}
                 className={`h-10 rounded-lg ${option.class} ${
-                  color === option.value ? 'ring-2 ring-offset-2 ring-gray-900' : ''
+                  color === option.value ? 'ring-2 ring-offset-2 ring-foreground' : ''
                 } disabled:opacity-60 disabled:cursor-not-allowed`}
                 title={option.label}
               />
@@ -100,15 +101,16 @@ export default function CreateCategoryForm() {
           <p className="text-destructive text-sm">{error}</p>
         )}
         <div className="flex gap-2">
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="flex-1"
           >
             {isSubmitting ? 'Creating Category...' : 'Create'}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="secondary"
             onClick={() => {
               setIsOpen(false)
               setName('')
@@ -116,10 +118,10 @@ export default function CreateCategoryForm() {
               setError('')
             }}
             disabled={isSubmitting}
-            className="flex-1 bg-gray-200 text-card-foreground px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1"
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
     </div>

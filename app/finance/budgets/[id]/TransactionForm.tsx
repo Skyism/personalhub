@@ -3,6 +3,8 @@
 import { useState, FormEvent, useRef } from 'react'
 import { createTransaction } from '../transactions/actions'
 import type { Tables } from '@/lib/database.types'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 type Category = Tables<'categories'>
 
@@ -104,22 +106,22 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
     return (
       <div className="mb-6">
         {message && (
-          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+          <div className="mb-4 p-3 bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 rounded-lg">
             {message}
           </div>
         )}
-        <button
+        <Button
           onClick={() => setIsExpanded(true)}
-          className="w-full bg-primary hover:bg-primary/90 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+          className="w-full"
         >
           Add Transaction
-        </button>
+        </Button>
       </div>
     )
   }
 
   return (
-    <div className="mb-6 bg-card border border-border rounded-lg p-6 scroll-mt-4">
+    <div className="mb-6 bg-muted/50 backdrop-blur-sm border border-border rounded-lg p-6 scroll-mt-4">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-foreground">Add Transaction</h3>
         <button
@@ -128,7 +130,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             setErrors({})
             setMessage(null)
           }}
-          className="text-muted-foreground hover:text-card-foreground"
+          className="text-muted-foreground hover:text-foreground"
           disabled={isSubmitting}
         >
           Cancel
@@ -138,10 +140,10 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Amount Input */}
         <div>
-          <label htmlFor="amount" className="block text-sm font-medium text-card-foreground mb-1">
+          <label htmlFor="amount" className="block text-sm font-medium text-foreground mb-1">
             Amount *
           </label>
-          <input
+          <Input
             ref={amountInputRef}
             type="number"
             id="amount"
@@ -155,9 +157,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
               setAmount(e.target.value)
               setErrors({ ...errors, amount: '' })
             }}
-            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted ${
-              errors.amount ? 'border-red-500' : 'border-border'
-            }`}
+            className={errors.amount ? 'border-destructive' : ''}
             placeholder="0.00"
             required
             disabled={isSubmitting}
@@ -169,7 +169,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
 
         {/* Category Dropdown */}
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-card-foreground mb-1">
+          <label htmlFor="category" className="block text-sm font-medium text-foreground mb-1">
             Category
           </label>
           <select
@@ -178,7 +178,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             autoComplete="off"
-            className="w-full px-3 py-2 text-base border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted"
+            className="w-full px-3 py-2 text-base border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted bg-background"
             disabled={isSubmitting}
           >
             <option value="">Uncategorized</option>
@@ -192,10 +192,10 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
 
         {/* Date Input */}
         <div>
-          <label htmlFor="date" className="block text-sm font-medium text-card-foreground mb-1">
+          <label htmlFor="date" className="block text-sm font-medium text-foreground mb-1">
             Date *
           </label>
-          <input
+          <Input
             type="date"
             id="date"
             name="date"
@@ -206,9 +206,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
               setDate(e.target.value)
               setErrors({ ...errors, date: '' })
             }}
-            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted ${
-              errors.date ? 'border-red-500' : 'border-border'
-            }`}
+            className={errors.date ? 'border-destructive' : ''}
             required
             disabled={isSubmitting}
           />
@@ -219,7 +217,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
 
         {/* Note Textarea */}
         <div>
-          <label htmlFor="note" className="block text-sm font-medium text-card-foreground mb-1">
+          <label htmlFor="note" className="block text-sm font-medium text-foreground mb-1">
             Note (Optional)
           </label>
           <textarea
@@ -234,8 +232,8 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             autoComplete="off"
             maxLength={500}
             rows={3}
-            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted ${
-              errors.note ? 'border-red-500' : 'border-border'
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent resize-none disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted bg-background ${
+              errors.note ? 'border-destructive' : 'border-input'
             }`}
             placeholder="Add a note about this transaction..."
             disabled={isSubmitting}
@@ -250,23 +248,19 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
 
         {/* Submit Error */}
         {errors.submit && (
-          <div className="p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+          <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive rounded-lg text-sm">
             {errors.submit}
           </div>
         )}
 
         {/* Submit Button */}
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full px-4 py-3 rounded-lg font-medium transition-colors ${
-            isSubmitting
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-primary hover:bg-primary/90 text-white'
-          }`}
+          className="w-full"
         >
           {isSubmitting ? 'Adding Transaction...' : 'Add Transaction'}
-        </button>
+        </Button>
       </form>
     </div>
   )
