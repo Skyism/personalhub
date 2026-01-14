@@ -1,10 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import type { Tables } from '@/lib/database.types'
-import CategorySpendingChart from '@/components/charts/CategorySpendingChart'
-import SpendingTrendsChart from '@/components/charts/SpendingTrendsChart'
-import BudgetComparisonChart from '@/components/charts/BudgetComparisonChart'
 import BudgetSelector from './BudgetSelector'
+import AnalyticsCharts from './AnalyticsCharts'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -209,26 +207,13 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
           <BudgetSelector budgets={budgets} selectedBudgetId={budgetId} />
         </div>
 
-        {/* Grid layout for charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Category Spending - Full width on mobile, left column on desktop */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Category Spending</h2>
-            <CategorySpendingChart data={categoryData} />
-          </div>
-
-          {/* Budget vs Actual - Full width on mobile, right column on desktop */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Budget vs Actual</h2>
-            <BudgetComparisonChart data={comparisonData} />
-          </div>
-
-          {/* Spending Trends - Full width on both mobile and desktop */}
-          <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Spending Trends</h2>
-            <SpendingTrendsChart data={dailyData} budgetTotal={budget.total_budget} />
-          </div>
-        </div>
+        {/* Charts rendered in Client Component with dynamic imports */}
+        <AnalyticsCharts
+          categoryData={categoryData}
+          dailyData={dailyData}
+          comparisonData={comparisonData}
+          budgetTotal={budget.total_budget}
+        />
       </div>
     </div>
   )
