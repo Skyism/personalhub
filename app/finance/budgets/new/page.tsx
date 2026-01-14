@@ -67,8 +67,10 @@ export default function NewBudgetPage() {
                 id="month"
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
+                autoComplete="off"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={isSubmitting}
+                className="w-full px-4 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
               />
             </div>
 
@@ -83,11 +85,14 @@ export default function NewBudgetPage() {
                   id="totalBudget"
                   value={totalBudget}
                   onChange={(e) => setTotalBudget(e.target.value)}
+                  inputMode="decimal"
+                  autoComplete="off"
                   step="0.01"
                   min="0.01"
                   required
+                  disabled={isSubmitting}
                   placeholder="0.00"
-                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-8 pr-4 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
                 />
               </div>
               <p className="text-sm text-gray-500 mt-1">

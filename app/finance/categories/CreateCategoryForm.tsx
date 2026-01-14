@@ -16,6 +16,7 @@ const COLOR_OPTIONS = [
 
 export default function CreateCategoryForm() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState('')
   const [color, setColor] = useState('#3B82F6')
   const [error, setError] = useState('')
@@ -29,13 +30,18 @@ export default function CreateCategoryForm() {
       return
     }
 
-    const result = await createCategory(name, color)
-    if (result.success) {
-      setName('')
-      setColor('#3B82F6')
-      setIsOpen(false)
-    } else {
-      setError(result.error || 'Failed to create category')
+    setIsSubmitting(true)
+    try {
+      const result = await createCategory(name, color)
+      if (result.success) {
+        setName('')
+        setColor('#3B82F6')
+        setIsOpen(false)
+      } else {
+        setError(result.error || 'Failed to create category')
+      }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -63,9 +69,12 @@ export default function CreateCategoryForm() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            inputMode="text"
+            autoComplete="off"
             placeholder="e.g., Food, Transport, Entertainment"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
             autoFocus
+            disabled={isSubmitting}
           />
         </div>
         <div>
@@ -78,9 +87,10 @@ export default function CreateCategoryForm() {
                 key={option.value}
                 type="button"
                 onClick={() => setColor(option.value)}
+                disabled={isSubmitting}
                 className={`h-10 rounded-lg ${option.class} ${
                   color === option.value ? 'ring-2 ring-offset-2 ring-gray-900' : ''
-                }`}
+                } disabled:opacity-60 disabled:cursor-not-allowed`}
                 title={option.label}
               />
             ))}
@@ -92,9 +102,10 @@ export default function CreateCategoryForm() {
         <div className="flex gap-2">
           <button
             type="submit"
-            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            disabled={isSubmitting}
+            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Create
+            {isSubmitting ? 'Creating Category...' : 'Create'}
           </button>
           <button
             type="button"
@@ -104,7 +115,8 @@ export default function CreateCategoryForm() {
               setColor('#3B82F6')
               setError('')
             }}
-            className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+            disabled={isSubmitting}
+            className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
