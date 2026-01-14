@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { motion } from 'motion/react'
 
 // Dynamic imports for charts to reduce initial bundle size
 // Charts use Recharts (~100KB gzipped) - defer loading until needed
@@ -31,7 +32,7 @@ const BudgetComparisonChart = dynamic(
 // Simple skeleton for chart loading
 function ChartSkeleton({ height }: { height: string }) {
   return (
-    <div className={`${height} bg-gray-200 rounded animate-pulse`} />
+    <div className={`${height} bg-muted/50 rounded animate-pulse`} />
   )
 }
 
@@ -67,25 +68,45 @@ export default function AnalyticsCharts({
   comparisonData,
   budgetTotal
 }: AnalyticsChartsProps) {
+  const charts = [
+    {
+      title: 'Category Spending',
+      component: <CategorySpendingChart data={categoryData} />,
+      className: ''
+    },
+    {
+      title: 'Budget vs Actual',
+      component: <BudgetComparisonChart data={comparisonData} />,
+      className: ''
+    },
+    {
+      title: 'Spending Trends',
+      component: <SpendingTrendsChart data={dailyData} budgetTotal={budgetTotal} />,
+      className: 'lg:col-span-2'
+    }
+  ]
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Category Spending - Full width on mobile, left column on desktop */}
-      <div className="bg-card rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-foreground mb-4">Category Spending</h2>
-        <CategorySpendingChart data={categoryData} />
-      </div>
-
-      {/* Budget vs Actual - Full width on mobile, right column on desktop */}
-      <div className="bg-card rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-foreground mb-4">Budget vs Actual</h2>
-        <BudgetComparisonChart data={comparisonData} />
-      </div>
-
-      {/* Spending Trends - Full width on both mobile and desktop */}
-      <div className="bg-card rounded-lg shadow p-6 lg:col-span-2">
-        <h2 className="text-xl font-bold text-foreground mb-4">Spending Trends</h2>
-        <SpendingTrendsChart data={dailyData} budgetTotal={budgetTotal} />
-      </div>
+      {charts.map((chart, index) => (
+        <motion.div
+          key={chart.title}
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.1 }}
+          className={`bg-muted/50 backdrop-blur-sm border border-border rounded-lg shadow p-6 ${chart.className}`}
+        >
+          <motion.h2
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
+            className="text-xl font-bold text-foreground mb-4"
+          >
+            {chart.title}
+          </motion.h2>
+          {chart.component}
+        </motion.div>
+      ))}
     </div>
   )
 }

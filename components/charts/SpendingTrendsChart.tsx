@@ -30,7 +30,7 @@ export default function SpendingTrendsChart({ data, budgetTotal }: SpendingTrend
   // Handle empty state
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[300px] text-gray-500">
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
         No transactions yet
       </div>
     )
@@ -45,19 +45,21 @@ export default function SpendingTrendsChart({ data, budgetTotal }: SpendingTrend
   return (
     <ChartWrapper height={300}>
       <LineChart data={sortedData}>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
           dataKey="formattedDate"
           angle={-45}
           textAnchor="end"
           height={60}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+          stroke="var(--muted-foreground)"
           interval="preserveStartEnd"
         />
         <YAxis
           tickFormatter={formatCurrency}
           width={60}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+          stroke="var(--muted-foreground)"
         />
         <Tooltip
           formatter={(value: any) => formatCurrency(value as number)}
@@ -67,18 +69,18 @@ export default function SpendingTrendsChart({ data, budgetTotal }: SpendingTrend
         <Line
           type="monotone"
           dataKey="amount"
-          stroke="#3B82F6"
+          stroke="var(--chart-1)"
           strokeWidth={2}
           name="Daily Spending"
-          dot={{ fill: '#3B82F6', r: 4 }}
+          dot={{ fill: 'var(--chart-1)', r: 4 }}
           activeDot={{ r: 6 }}
         />
         {dailyBudget && (
           <ReferenceLine
             y={dailyBudget}
-            stroke="#9CA3AF"
+            stroke="var(--muted-foreground)"
             strokeDasharray="5 5"
-            label={{ value: 'Daily Budget', position: 'right', fill: '#6B7280' }}
+            label={{ value: 'Daily Budget', position: 'right', fill: 'var(--muted-foreground)' }}
           />
         )}
       </LineChart>

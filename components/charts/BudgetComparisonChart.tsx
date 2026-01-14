@@ -34,15 +34,15 @@ const CustomTooltip = ({ active, payload }: any) => {
   const percentage = data.budgeted > 0 ? (data.spent / data.budgeted * 100).toFixed(0) : '0'
 
   return (
-    <div className="bg-white p-3 border border-gray-200 rounded shadow-md">
-      <p className="font-semibold text-gray-900 mb-2">{data.category}</p>
-      <p className="text-sm text-gray-600">
+    <div className="bg-card p-3 border border-border rounded shadow-md">
+      <p className="font-semibold text-foreground mb-2">{data.category}</p>
+      <p className="text-sm text-muted-foreground">
         Spent: {formatCurrency(data.spent)}
       </p>
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-muted-foreground">
         Budgeted: {formatCurrency(data.budgeted)}
       </p>
-      <p className="text-sm font-medium text-gray-900 mt-1">
+      <p className="text-sm font-medium text-foreground mt-1">
         {percentage}% used
       </p>
     </div>
@@ -64,7 +64,7 @@ export default function BudgetComparisonChart({ data }: BudgetComparisonChartPro
   // Handle empty state
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[300px] text-gray-500">
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
         No budget allocations yet
       </div>
     )
@@ -83,17 +83,19 @@ export default function BudgetComparisonChart({ data }: BudgetComparisonChartPro
         layout="vertical"
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
           type="number"
           tickFormatter={formatCurrency}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+          stroke="var(--muted-foreground)"
         />
         <YAxis
           type="category"
           dataKey="category"
           width={100}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
+          stroke="var(--muted-foreground)"
         />
         <Tooltip content={<CustomTooltip />} />
         <Legend

@@ -53,7 +53,7 @@ export default function CategorySpendingChart({ data }: CategorySpendingChartPro
   // Empty state
   if (chartData.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[400px] text-gray-500">
+      <div className="flex items-center justify-center h-[400px] text-muted-foreground">
         No spending data yet
       </div>
     )
@@ -78,9 +78,9 @@ export default function CategorySpendingChart({ data }: CategorySpendingChartPro
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-3">
-          <p className="font-semibold text-gray-900">{payload[0].name}</p>
-          <p className="text-gray-700">{formatCurrency(payload[0].value)}</p>
+        <div className="bg-card border border-border rounded-lg shadow-lg p-3">
+          <p className="font-semibold text-foreground">{payload[0].name}</p>
+          <p className="text-muted-foreground">{formatCurrency(payload[0].value)}</p>
         </div>
       )
     }
@@ -109,7 +109,7 @@ export default function CategorySpendingChart({ data }: CategorySpendingChartPro
           verticalAlign="bottom"
           height={36}
           formatter={(value, entry: any) => (
-            <span className="text-sm text-gray-700">{value}</span>
+            <span className="text-sm text-muted-foreground">{value}</span>
           )}
         />
       </PieChart>
