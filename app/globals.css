@@ -62,22 +62,8 @@ html {
   --destructive-foreground: oklch(15% 0.02 270);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(15% 0.02 270);
-    --foreground: oklch(95% 0.01 270);
-    --primary: oklch(60% 0.18 270);
-    --primary-foreground: oklch(15% 0.02 270);
-    --accent: oklch(75% 0.15 195);
-    --accent-foreground: oklch(15% 0.02 270);
-    --muted: oklch(20% 0.02 270);
-    --muted-foreground: oklch(70% 0.01 270);
-    --border: oklch(25% 0.03 270);
-    --input: oklch(25% 0.03 270);
-    --ring: oklch(60% 0.18 270);
-    --destructive: oklch(65% 0.20 25);
-    --destructive-foreground: oklch(15% 0.02 270);
-  }
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 body {
