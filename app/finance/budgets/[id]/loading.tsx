@@ -1,13 +1,13 @@
 export default function BudgetDetailLoading() {
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-2xl mx-auto mt-8">
         <div className="mb-6">
           <div className="h-6 w-32 bg-gray-300 rounded animate-pulse" />
         </div>
 
         {/* Header skeleton */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="bg-card rounded-lg shadow p-6 mb-6">
           <div className="flex justify-between items-start mb-6">
             <div>
               <div className="h-9 w-48 bg-gray-300 rounded animate-pulse" />
@@ -19,14 +19,14 @@ export default function BudgetDetailLoading() {
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-gray-200">
+          <div className="flex gap-3 pt-4 border-t border-border">
             <div className="flex-1 h-10 bg-gray-200 rounded-lg animate-pulse" />
             <div className="flex-1 h-10 bg-gray-200 rounded-lg animate-pulse" />
           </div>
         </div>
 
         {/* Category allocation skeleton */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="bg-card rounded-lg shadow p-6 mb-6">
           <div className="h-7 w-48 bg-gray-300 rounded animate-pulse mb-4" />
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
@@ -36,7 +36,7 @@ export default function BudgetDetailLoading() {
         </div>
 
         {/* Spending summary skeleton */}
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
+        <div className="bg-card rounded-lg shadow p-6 mt-6">
           <div className="h-7 w-48 bg-gray-300 rounded animate-pulse mb-6" />
 
           <div className="mb-6">
@@ -58,7 +58,7 @@ export default function BudgetDetailLoading() {
             <div className="h-6 w-40 bg-gray-300 rounded animate-pulse mb-4" />
             <div className="space-y-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="border border-gray-200 rounded-lg p-4">
+                <div key={i} className="border border-border rounded-lg p-4">
                   <div className="flex justify-between items-center mb-2">
                     <div className="h-6 w-24 bg-gray-200 rounded animate-pulse" />
                     <div className="text-right">
@@ -76,7 +76,7 @@ export default function BudgetDetailLoading() {
         </div>
 
         {/* Transaction list skeleton */}
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
+        <div className="bg-card rounded-lg shadow p-6 mt-6">
           <div className="h-7 w-40 bg-gray-300 rounded animate-pulse mb-6" />
 
           <div className="space-y-6">

@@ -21,10 +21,20 @@ html {
 }
 
 @theme inline {
+  --font-sans: var(--font-plus-jakarta-sans);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Map CSS variables to Tailwind color utilities */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--background);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--background);
+  --color-popover-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--muted);
+  --color-secondary-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
@@ -34,8 +44,6 @@ html {
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --font-sans: var(--font-plus-jakarta-sans);
-  --font-mono: var(--font-jetbrains-mono);
 }
 
 .dark {

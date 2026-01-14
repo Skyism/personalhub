@@ -87,7 +87,7 @@ export default function CategoryAllocation({
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+              className="flex items-center justify-between p-4 bg-background rounded-lg border border-border"
             >
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 rounded-full bg-gray-200 animate-pulse" />
@@ -105,8 +105,8 @@ export default function CategoryAllocation({
     <div>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Category Allocations</h2>
-          <p className="text-sm text-gray-600 mt-1">
+          <h2 className="text-xl font-semibold text-foreground">Category Allocations</h2>
+          <p className="text-sm text-muted-foreground mt-1">
             {formatCurrency(totalAllocated)} / {formatCurrency(totalBudget)} allocated
             {availableAmount > 0 && (
               <span className="text-green-600 ml-2">
@@ -118,7 +118,7 @@ export default function CategoryAllocation({
         {availableCategories.length > 0 && !isAdding && (
           <button
             onClick={() => setIsAdding(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm"
           >
             + Add Allocation
           </button>
@@ -126,18 +126,18 @@ export default function CategoryAllocation({
       </div>
 
       {isAdding && (
-        <div className="bg-gray-50 rounded-lg p-4 mb-4 border border-gray-200">
-          <h3 className="font-medium text-gray-900 mb-3">Add Category Allocation</h3>
+        <div className="bg-background rounded-lg p-4 mb-4 border border-border">
+          <h3 className="font-medium text-foreground mb-3">Add Category Allocation</h3>
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="category" className="block text-sm font-medium text-card-foreground mb-1">
                 Category
               </label>
               <select
                 id="category"
                 value={selectedCategoryId || ''}
                 onChange={(e) => setSelectedCategoryId(parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select a category</option>
                 {availableCategories.map((cat) => (
@@ -148,7 +148,7 @@ export default function CategoryAllocation({
               </select>
             </div>
             <div>
-              <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="amount" className="block text-sm font-medium text-card-foreground mb-1">
                 Amount
               </label>
               <input
@@ -159,14 +159,14 @@ export default function CategoryAllocation({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0.00"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            {error && <p className="text-red-600 text-sm">{error}</p>}
+            {error && <p className="text-destructive text-sm">{error}</p>}
             <div className="flex gap-2">
               <button
                 type="submit"
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="flex-1 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium"
               >
                 Add
               </button>
@@ -178,7 +178,7 @@ export default function CategoryAllocation({
                   setAmount('')
                   setError('')
                 }}
-                className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                className="flex-1 bg-gray-200 text-card-foreground px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -188,7 +188,7 @@ export default function CategoryAllocation({
       )}
 
       {allocations.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-muted-foreground">
           <svg
             className="w-16 h-16 mx-auto mb-4 text-gray-300"
             fill="none"
@@ -202,7 +202,7 @@ export default function CategoryAllocation({
               d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
             />
           </svg>
-          <p className="text-lg font-medium text-gray-700 mb-1">No category allocations yet</p>
+          <p className="text-lg font-medium text-card-foreground mb-1">No category allocations yet</p>
           <p className="text-sm mt-2">
             {availableCategories.length > 0
               ? 'Click "Add Allocation" above to assign budget to categories.'
@@ -223,22 +223,22 @@ export default function CategoryAllocation({
             return (
               <div
                 key={allocation.id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+                className="flex items-center justify-between p-4 bg-background rounded-lg border border-border"
               >
                 <div className="flex items-center gap-3">
                   <div
                     className="w-4 h-4 rounded-full"
                     style={{ backgroundColor: category.color || '#3B82F6' }}
                   />
-                  <span className="font-medium text-gray-900">{category.name}</span>
+                  <span className="font-medium text-foreground">{category.name}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-lg font-semibold text-gray-900">
+                  <span className="text-lg font-semibold text-foreground">
                     {formatCurrency(allocation.allocated_amount)}
                   </span>
                   <button
                     onClick={() => handleRemove(allocation.category_id)}
-                    className="text-red-600 hover:text-red-700 font-medium text-sm"
+                    className="text-destructive hover:text-red-700 font-medium text-sm"
                   >
                     Remove
                   </button>

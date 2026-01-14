@@ -169,7 +169,7 @@ export default async function BudgetDetailPage({ params }: PageProps) {
   const statusColor = getStatusColor(spentPercentage)
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-2xl mx-auto mt-8">
         <div className="mb-6">
           <Link
@@ -180,29 +180,29 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           </Link>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="bg-card rounded-lg shadow p-6 mb-6">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-foreground">
                 {formatMonth(budget.month)}
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-muted-foreground mt-1">
                 Created {budget.created_at ? formatDate(budget.created_at) : 'Unknown'}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="text-3xl font-bold text-foreground">
                 {formatCurrency(budget.total_budget)}
               </p>
-              <p className="text-gray-600 text-sm">Total Budget</p>
+              <p className="text-muted-foreground text-sm">Total Budget</p>
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-gray-200">
+          <div className="flex gap-3 pt-4 border-t border-border">
             {/* TODO: Implement edit functionality in future plan */}
             <button
               disabled
-              className="flex-1 bg-gray-200 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed font-medium"
+              className="flex-1 bg-gray-200 text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
               title="Edit functionality coming soon"
             >
               Edit Budget
@@ -210,7 +210,7 @@ export default async function BudgetDetailPage({ params }: PageProps) {
             {/* TODO: Implement delete functionality in future plan */}
             <button
               disabled
-              className="flex-1 bg-gray-200 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed font-medium"
+              className="flex-1 bg-gray-200 text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
               title="Delete functionality coming soon"
             >
               Delete Budget
@@ -218,7 +218,7 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-card rounded-lg shadow p-6">
           <CategoryAllocation
             budgetId={budgetId}
             categories={categories || []}
@@ -227,17 +227,17 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           />
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Spending Summary</h2>
+        <div className="bg-card rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Spending Summary</h2>
 
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   {formatCurrency(totalSpent)} spent of {formatCurrency(budget.total_budget)} budget
                 </p>
                 <p className={`text-sm font-semibold ${
-                  statusColor === 'red' ? 'text-red-600' :
+                  statusColor === 'red' ? 'text-destructive' :
                   statusColor === 'yellow' ? 'text-yellow-600' :
                   'text-green-600'
                 }`}>
@@ -249,7 +249,7 @@ export default async function BudgetDetailPage({ params }: PageProps) {
               </div>
               <div className="text-right">
                 <p className={`text-2xl font-bold ${
-                  statusColor === 'red' ? 'text-red-600' :
+                  statusColor === 'red' ? 'text-destructive' :
                   statusColor === 'yellow' ? 'text-yellow-600' :
                   'text-green-600'
                 }`}>
@@ -272,13 +272,13 @@ export default async function BudgetDetailPage({ params }: PageProps) {
 
           {categoryBreakdown.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Category Breakdown</h3>
               <div className="space-y-4">
                 {categoryBreakdown.map(category => {
                   const categoryStatusColor = getStatusColor(category.percentage)
 
                   return (
-                    <div key={category.id} className="border border-gray-200 rounded-lg p-4">
+                    <div key={category.id} className="border border-border rounded-lg p-4">
                       <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center gap-2">
                           <span
@@ -292,11 +292,11 @@ export default async function BudgetDetailPage({ params }: PageProps) {
                           </span>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-semibold text-gray-900">
+                          <p className="text-sm font-semibold text-foreground">
                             {formatCurrency(category.spent)} / {formatCurrency(category.allocated)}
                           </p>
                           <p className={`text-xs font-semibold ${
-                            categoryStatusColor === 'red' ? 'text-red-600' :
+                            categoryStatusColor === 'red' ? 'text-destructive' :
                             categoryStatusColor === 'yellow' ? 'text-yellow-600' :
                             'text-green-600'
                           }`}>
@@ -322,13 +322,13 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Transactions</h2>
+        <div className="bg-card rounded-lg shadow p-6 mt-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Transactions</h2>
 
           <TransactionForm budgetId={budgetId} categories={categories || []} />
 
           {!transactions || transactions.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-muted-foreground text-center py-8">
               No transactions yet. Add your first expense below.
             </p>
           ) : (
@@ -338,7 +338,7 @@ export default async function BudgetDetailPage({ params }: PageProps) {
 
                 return (
                   <div key={group}>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-3">{group}</h3>
+                    <h3 className="text-sm font-semibold text-card-foreground mb-3">{group}</h3>
                     <div className="space-y-3">
                       {groupTransactions.map(transaction => (
                         <TransactionItem

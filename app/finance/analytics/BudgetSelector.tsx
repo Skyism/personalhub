@@ -28,7 +28,7 @@ export default function BudgetSelector({ budgets, selectedBudgetId }: BudgetSele
       <select
         value={selectedBudgetId}
         onChange={handleChange}
-        className="appearance-none w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 text-base cursor-pointer"
+        className="appearance-none w-full px-4 py-3 pr-10 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-card text-foreground text-base cursor-pointer"
       >
         {budgets.map(budget => (
           <option key={budget.id} value={budget.id}>
@@ -37,7 +37,7 @@ export default function BudgetSelector({ budgets, selectedBudgetId }: BudgetSele
         ))}
       </select>
       <svg
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none"
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

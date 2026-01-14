@@ -95,7 +95,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
 
   return (
     <div className={`group border rounded-lg p-4 transition-colors ${
-      isEditing ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+      isEditing ? 'border-blue-400 bg-blue-50' : 'border-border hover:border-border'
     }`}>
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
@@ -106,7 +106,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
                   value={selectedCategory === null ? '' : selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value === '' ? null : parseInt(e.target.value))}
                   onKeyDown={handleKeyDown}
-                  className="px-2 py-1 rounded text-xs font-medium border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-2 py-1 rounded text-xs font-medium border border-border focus:outline-none focus:ring-2 focus:ring-blue-500"
                   disabled={isPending}
                   autoFocus
                   aria-label="Select category"
@@ -121,14 +121,14 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
                 <button
                   onClick={handleSaveCategory}
                   disabled={isPending}
-                  className="px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="px-2 py-1 text-xs font-medium bg-primary text-white rounded hover:bg-primary/90 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   {isPending ? 'Saving...' : 'Save'}
                 </button>
                 <button
                   onClick={handleCancelEdit}
                   disabled={isPending}
-                  className="px-2 py-1 text-xs font-medium text-gray-700 hover:text-gray-900 disabled:text-gray-400"
+                  className="px-2 py-1 text-xs font-medium text-card-foreground hover:text-foreground disabled:text-gray-400"
                 >
                   Cancel
                 </button>
@@ -137,7 +137,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
               <>
                 <button
                   onClick={handleEditClick}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors hover:bg-gray-100 border border-transparent hover:border-gray-300 active:bg-gray-200"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors hover:bg-muted border border-transparent hover:border-border active:bg-gray-200"
                   aria-label="Edit category"
                 >
                   {transaction.categories ? (
@@ -156,7 +156,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
                       {transaction.categories.name}
                     </span>
                   ) : (
-                    <span className="text-gray-600">Uncategorized</span>
+                    <span className="text-muted-foreground">Uncategorized</span>
                   )}
                   <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -168,15 +168,15 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
               {transaction.source}
             </span>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             {formatTransactionDate(transaction.transaction_date)}
           </p>
           {transaction.note && (
-            <p className="text-sm text-gray-700 mt-1">{transaction.note}</p>
+            <p className="text-sm text-card-foreground mt-1">{transaction.note}</p>
           )}
         </div>
         <div className="text-right ml-4">
-          <p className="text-lg font-bold text-gray-900">
+          <p className="text-lg font-bold text-foreground">
             {formatCurrency(transaction.amount)}
           </p>
         </div>
@@ -189,8 +189,8 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
             disabled={isDeleting}
             className={`px-4 py-2 text-sm font-medium transition-colors rounded border ${
               isDeleting
-                ? 'text-gray-400 cursor-not-allowed border-gray-300 bg-gray-100'
-                : 'text-red-600 hover:text-red-700 border-red-300 hover:bg-red-50 active:bg-red-100'
+                ? 'text-gray-400 cursor-not-allowed border-border bg-muted'
+                : 'text-destructive hover:text-red-700 border-red-300 hover:bg-red-50 active:bg-red-100'
             }`}
           >
             {isDeleting ? 'Deleting...' : 'Delete'}

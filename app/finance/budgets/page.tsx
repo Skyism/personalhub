@@ -36,33 +36,33 @@ export default async function BudgetsPage() {
   const hasBudgets = budgets && budgets.length > 0
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-2xl mx-auto mt-8">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Budgets</h1>
-            <p className="text-gray-600 mt-1">Manage your monthly budgets</p>
+            <h1 className="text-3xl font-bold text-foreground">Budgets</h1>
+            <p className="text-muted-foreground mt-1">Manage your monthly budgets</p>
           </div>
           <Link
             href="/finance/budgets/new"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:opacity-90 transition-opacity font-medium"
           >
             Create Budget
           </Link>
         </div>
 
         {!hasBudgets ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
+          <div className="bg-card rounded-lg shadow p-8 text-center border border-border">
             <div className="max-w-md mx-auto">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              <h2 className="text-xl font-semibold text-foreground mb-2">
                 No budgets yet
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Get started by creating your first budget to track your monthly spending.
               </p>
               <Link
                 href="/finance/budgets/new"
-                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium"
               >
                 Create Your First Budget
               </Link>
@@ -74,22 +74,22 @@ export default async function BudgetsPage() {
               <Link
                 key={budget.id}
                 href={`/finance/budgets/${budget.id}`}
-                className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6 border border-gray-200"
+                className="block bg-card rounded-lg shadow hover:shadow-md transition-shadow p-6 border border-border"
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-xl font-semibold text-foreground">
                       {formatMonth(budget.month)}
                     </h2>
-                    <p className="text-gray-600 text-sm mt-1">
+                    <p className="text-muted-foreground text-sm mt-1">
                       Created {new Date(budget.created_at || '').toLocaleDateString()}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-bold text-foreground font-mono">
                       {formatCurrency(budget.total_budget)}
                     </p>
-                    <p className="text-gray-600 text-sm">Total Budget</p>
+                    <p className="text-muted-foreground text-sm">Total Budget</p>
                   </div>
                 </div>
               </Link>

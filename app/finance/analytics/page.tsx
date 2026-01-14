@@ -46,7 +46,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   // Handle no budgets case
   if (!budgets || budgets.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4">
+      <div className="min-h-screen bg-background p-4">
         <div className="max-w-6xl mx-auto mt-8">
           <div className="mb-6">
             <Link
@@ -56,14 +56,14 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
               &larr; Back to Budgets
             </Link>
           </div>
-          <div className="bg-white rounded-lg shadow p-12 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">No Budgets Yet</h1>
-            <p className="text-gray-600 mb-6">
+          <div className="bg-card rounded-lg shadow p-12 text-center">
+            <h1 className="text-2xl font-bold text-foreground mb-4">No Budgets Yet</h1>
+            <p className="text-muted-foreground mb-6">
               Create your first budget to see analytics
             </p>
             <Link
               href="/finance/budgets/new"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
             >
               Create Budget
             </Link>
@@ -87,10 +87,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   // If budget not found, redirect to most recent
   if (!budget) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4">
+      <div className="min-h-screen bg-background p-4">
         <div className="max-w-6xl mx-auto mt-8">
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-gray-600 mb-4">Budget not found</p>
+          <div className="bg-card rounded-lg shadow p-8 text-center">
+            <p className="text-muted-foreground mb-4">Budget not found</p>
             <Link
               href={`/finance/analytics?budget_id=${budgets[0].id}`}
               className="text-blue-600 hover:text-blue-700 font-medium"
@@ -190,7 +190,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   }))
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-6xl mx-auto mt-8">
         <div className="mb-6">
           <Link
@@ -203,7 +203,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
         {/* Header with budget selector */}
         <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
+          <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
           <BudgetSelector budgets={budgets} selectedBudgetId={budgetId} />
         </div>
 

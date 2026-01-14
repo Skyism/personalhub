@@ -46,7 +46,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg lg:hidden z-50 pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-lg lg:hidden z-50 pb-safe">
       <div className="grid grid-cols-4 h-16">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/finance' && pathname?.startsWith(item.href))
@@ -56,7 +56,7 @@ export default function BottomNav() {
               key={item.name}
               href={item.href}
               className={`flex flex-col items-center justify-center py-3 transition-colors ${
-                isActive ? 'text-blue-600' : 'text-gray-600'
+                isActive ? 'text-blue-600' : 'text-muted-foreground'
               }`}
             >
               {item.icon}

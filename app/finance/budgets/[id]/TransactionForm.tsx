@@ -110,7 +110,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
         )}
         <button
           onClick={() => setIsExpanded(true)}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+          className="w-full bg-primary hover:bg-primary/90 text-white px-4 py-3 rounded-lg font-medium transition-colors"
         >
           Add Transaction
         </button>
@@ -119,16 +119,16 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
   }
 
   return (
-    <div className="mb-6 bg-white border border-gray-200 rounded-lg p-6 scroll-mt-4">
+    <div className="mb-6 bg-card border border-border rounded-lg p-6 scroll-mt-4">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Add Transaction</h3>
+        <h3 className="text-lg font-semibold text-foreground">Add Transaction</h3>
         <button
           onClick={() => {
             setIsExpanded(false)
             setErrors({})
             setMessage(null)
           }}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-muted-foreground hover:text-card-foreground"
           disabled={isSubmitting}
         >
           Cancel
@@ -138,7 +138,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Amount Input */}
         <div>
-          <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="amount" className="block text-sm font-medium text-card-foreground mb-1">
             Amount *
           </label>
           <input
@@ -155,21 +155,21 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
               setAmount(e.target.value)
               setErrors({ ...errors, amount: '' })
             }}
-            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100 ${
-              errors.amount ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted ${
+              errors.amount ? 'border-red-500' : 'border-border'
             }`}
             placeholder="0.00"
             required
             disabled={isSubmitting}
           />
           {errors.amount && (
-            <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
+            <p className="mt-1 text-sm text-destructive">{errors.amount}</p>
           )}
         </div>
 
         {/* Category Dropdown */}
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="category" className="block text-sm font-medium text-card-foreground mb-1">
             Category
           </label>
           <select
@@ -178,7 +178,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             autoComplete="off"
-            className="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
+            className="w-full px-3 py-2 text-base border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted"
             disabled={isSubmitting}
           >
             <option value="">Uncategorized</option>
@@ -192,7 +192,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
 
         {/* Date Input */}
         <div>
-          <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="date" className="block text-sm font-medium text-card-foreground mb-1">
             Date *
           </label>
           <input
@@ -206,20 +206,20 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
               setDate(e.target.value)
               setErrors({ ...errors, date: '' })
             }}
-            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100 ${
-              errors.date ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted ${
+              errors.date ? 'border-red-500' : 'border-border'
             }`}
             required
             disabled={isSubmitting}
           />
           {errors.date && (
-            <p className="mt-1 text-sm text-red-600">{errors.date}</p>
+            <p className="mt-1 text-sm text-destructive">{errors.date}</p>
           )}
         </div>
 
         {/* Note Textarea */}
         <div>
-          <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="note" className="block text-sm font-medium text-card-foreground mb-1">
             Note (Optional)
           </label>
           <textarea
@@ -234,16 +234,16 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
             autoComplete="off"
             maxLength={500}
             rows={3}
-            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100 ${
-              errors.note ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted ${
+              errors.note ? 'border-red-500' : 'border-border'
             }`}
             placeholder="Add a note about this transaction..."
             disabled={isSubmitting}
           />
           {errors.note && (
-            <p className="mt-1 text-sm text-red-600">{errors.note}</p>
+            <p className="mt-1 text-sm text-destructive">{errors.note}</p>
           )}
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             {note.length}/500 characters
           </p>
         </div>
@@ -262,7 +262,7 @@ export default function TransactionForm({ budgetId, categories }: TransactionFor
           className={`w-full px-4 py-3 rounded-lg font-medium transition-colors ${
             isSubmitting
               ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700 text-white'
+              : 'bg-primary hover:bg-primary/90 text-white'
           }`}
         >
           {isSubmitting ? 'Adding Transaction...' : 'Add Transaction'}

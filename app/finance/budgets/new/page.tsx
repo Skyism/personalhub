@@ -36,7 +36,7 @@ export default function NewBudgetPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-2xl mx-auto mt-8">
         <div className="mb-6">
           <Link
@@ -47,9 +47,9 @@ export default function NewBudgetPage() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Budget</h1>
-          <p className="text-gray-600 mb-6">Set up a new monthly budget</p>
+        <div className="bg-card rounded-lg shadow p-6">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Create Budget</h1>
+          <p className="text-muted-foreground mb-6">Set up a new monthly budget</p>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -59,7 +59,7 @@ export default function NewBudgetPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="month" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="month" className="block text-sm font-medium text-card-foreground mb-2">
                 Month
               </label>
               <input
@@ -70,16 +70,16 @@ export default function NewBudgetPage() {
                 autoComplete="off"
                 required
                 disabled={isSubmitting}
-                className="w-full px-4 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
+                className="w-full px-4 py-2 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted"
               />
             </div>
 
             <div>
-              <label htmlFor="totalBudget" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="totalBudget" className="block text-sm font-medium text-card-foreground mb-2">
                 Total Budget
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                 <input
                   type="number"
                   id="totalBudget"
@@ -92,10 +92,10 @@ export default function NewBudgetPage() {
                   required
                   disabled={isSubmitting}
                   placeholder="0.00"
-                  className="w-full pl-8 pr-4 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
+                  className="w-full pl-8 pr-4 py-2 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-muted"
                 />
               </div>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Enter your total monthly budget in dollars
               </p>
             </div>
@@ -104,13 +104,13 @@ export default function NewBudgetPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex-1 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Creating Budget...' : 'Create Budget'}
               </button>
               <Link
                 href="/finance/budgets"
-                className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center"
+                className="flex-1 bg-gray-200 text-card-foreground px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center"
               >
                 Cancel
               </Link>
