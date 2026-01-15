@@ -1,8 +1,9 @@
 # Roadmap: Personal Nexus
 
-## Completed Milestones
+## Milestones
 
 - ✅ [v1.0 MVP](milestones/v1.0-ROADMAP.md) (Phases 1-8) — SHIPPED 2026-01-14
+- 🚧 **v1.1 Skincare Module** - Phases 9-14 (in progress)
 
 ## Overview
 
@@ -37,6 +38,71 @@ Decimal phases appear between their surrounding integers in numeric order.
 </details>
 
 ## Phase Details
+
+### 🚧 v1.1 Skincare Module (In Progress)
+
+**Milestone Goal:** Add comprehensive skincare tracking with product catalog, routine management, application logging, and progress analytics with photo tracking.
+
+#### Phase 9: Skincare Foundation
+
+**Goal**: Establish database schema for products, routines, and application logs with Supabase backend
+**Depends on**: v1.0 complete
+**Research**: Unlikely (established Supabase patterns from Finance module)
+**Plans**: TBD
+
+Plans:
+- [ ] 09-01: TBD (run /gsd:plan-phase 9 to break down)
+
+#### Phase 10: Product Management
+
+**Goal**: Build product catalog UI with ingredient tracking, search, and product details
+**Depends on**: Phase 9
+**Research**: Unlikely (CRUD operations with existing patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 10-01: TBD
+
+#### Phase 11: Routine Builder
+
+**Goal**: Create morning/evening routine builder with product scheduling and ordering
+**Depends on**: Phase 10
+**Research**: Unlikely (internal UI building on Phase 9/10 patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 11-01: TBD
+
+#### Phase 12: Application Tracking
+
+**Goal**: Implement quick-log interface for tracking daily product usage
+**Depends on**: Phase 11
+**Research**: Unlikely (similar to Finance transaction logging patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 12-01: TBD
+
+#### Phase 13: Skin Analytics
+
+**Goal**: Create progress photo upload/storage, skin condition tracking, and trend visualization
+**Depends on**: Phase 12
+**Research**: Likely (new Supabase Storage integration for images)
+**Research topics**: Supabase Storage for progress photos, image optimization for web, photo comparison UI patterns, before/after timeline visualizations
+**Plans**: TBD
+
+Plans:
+- [ ] 13-01: TBD
+
+#### Phase 14: Skincare Polish
+
+**Goal**: Mobile UX refinement, notification reminders for routine adherence, and performance tuning
+**Depends on**: Phase 13
+**Research**: Unlikely (mobile polish following Finance Phase 7 patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 14-01: TBD
 
 <details>
 <summary>✅ v1.0 MVP Phase Details (Archived) — See milestones/v1.0-ROADMAP.md</summary>
@@ -139,18 +205,24 @@ Plans:
 
 </details>
 
-## Progress (v1.0 MVP — Complete)
+## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 1/1 | Complete | 2026-01-11 |
-| 2. Supabase Backend | 2/2 | Complete | 2026-01-11 |
-| 3. Budget Management | 2/2 | Complete | 2026-01-12 |
-| 4. Transaction System | 2/2 | Complete | 2026-01-12 |
-| 5. SMS Integration | 2/2 | Complete | 2026-01-13 |
-| 6. Analytics Dashboard | 3/3 | Complete | 2026-01-13 |
-| 7. Mobile Polish | 3/3 | Complete | 2026-01-14 |
-| 8. UI Overhaul | 3/3 | Complete | 2026-01-14 |
+| Phase | Milestone | Plans | Status | Completed |
+|-------|-----------|-------|--------|-----------|
+| 1. Foundation | v1.0 | 1/1 | Complete | 2026-01-11 |
+| 2. Supabase Backend | v1.0 | 2/2 | Complete | 2026-01-11 |
+| 3. Budget Management | v1.0 | 2/2 | Complete | 2026-01-12 |
+| 4. Transaction System | v1.0 | 2/2 | Complete | 2026-01-12 |
+| 5. SMS Integration | v1.0 | 2/2 | Complete | 2026-01-13 |
+| 6. Analytics Dashboard | v1.0 | 3/3 | Complete | 2026-01-13 |
+| 7. Mobile Polish | v1.0 | 3/3 | Complete | 2026-01-14 |
+| 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
+| 9. Skincare Foundation | v1.1 | 0/? | Not started | - |
+| 10. Product Management | v1.1 | 0/? | Not started | - |
+| 11. Routine Builder | v1.1 | 0/? | Not started | - |
+| 12. Application Tracking | v1.1 | 0/? | Not started | - |
+| 13. Skin Analytics | v1.1 | 0/? | Not started | - |
+| 14. Skincare Polish | v1.1 | 0/? | Not started | - |

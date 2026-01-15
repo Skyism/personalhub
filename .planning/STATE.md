@@ -5,15 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-01-14)
 
 **Core value:** The ability to text an expense and instantly see it reflected in the dashboard - removing all friction from expense tracking.
-**Current focus:** v1.0 MVP complete — Planning next milestone
+**Current focus:** v1.1 Skincare Module — Ready to plan Phase 9
 
 ## Current Position
 
-Milestone: v1.0 MVP complete
-Status: Shipped
-Last activity: 2026-01-14 — v1.0 milestone complete
+Milestone: v1.1 Skincare Module
+Phase: 9 of 14 (Skincare Foundation)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-14 — Milestone v1.1 created
 
-Progress: v1.0: █████████████ 100% (8 phases, 18 plans shipped)
+Progress: ░░░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -55,23 +57,23 @@ All decisions logged in PROJECT.md Key Decisions table. Key v1.0 decisions:
 **Stats:** 8 phases, 18 plans, 110 files, 929k LOC
 **Archive:** .planning/milestones/v1.0-ROADMAP.md
 
+### Roadmap Evolution
+
+- Milestone v1.1 created: Skincare Module, 6 phases (Phase 9-14)
+
 ### Deferred Issues
 
-- Authentication system — deferred to v1.1 (blocking production deployment)
+- Authentication system — deferred (will be needed before production deployment)
 - Recurring transactions — deferred beyond v1.0
 - Multi-user functionality — deferred beyond v1.0
 
 ### Blockers/Concerns
 
-**Authentication Required for Production:**
-- Phase 3 execution revealed that RLS policies and foreign key constraints are blocking operations without auth
-- Temporary workarounds applied: RLS policies allow TEMP_USER_ID, FK constraints removed
-- **Action required:** When implementing authentication (future phase), restore proper RLS policies (`auth.uid() = user_id` only) and re-add foreign key constraints to `auth.users(id)`
-- Impact: Low (dev workaround functional), must be addressed before production
+None (cleared for v1.1 start)
 
 ## Session Continuity
 
 Last session: 2026-01-14
-Stopped at: v1.0 milestone complete
+Stopped at: Milestone v1.1 initialization
 Resume file: None
-Next action: Plan v1.1 milestone (Authentication system priority) or discuss next goals.
+Next action: Plan Phase 9 (Skincare Foundation)
