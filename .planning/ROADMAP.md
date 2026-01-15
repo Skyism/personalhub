@@ -72,12 +72,12 @@ Plans:
 **Depends on**: Phase 10
 **Research**: Complete (11-RESEARCH.md created 2026-01-15)
 **Research topics**: Next.js cron job approaches (Vercel Cron, cron-job.org webhooks, node-cron), scheduled task patterns for production, idempotent job execution
-**Status**: In progress
-**Plans**: 1/2 complete
+**Status**: Complete
+**Plans**: 2/2 complete
 
 Plans:
 - [x] 11-01: Database & Morning Reminder (reminder_log table, morning cron endpoint with CRON_SECRET) - Completed 2026-01-15
-- [ ] 11-02: Night Reminder & Deployment (night cron endpoint with message rotation, vercel.json config)
+- [x] 11-02: Night Reminder & Deployment (night cron endpoint with message rotation, vercel.json config) - Completed 2026-01-15
 
 #### Phase 12: SMS Reminders
 
