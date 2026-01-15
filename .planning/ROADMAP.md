@@ -1,8 +1,12 @@
 # Roadmap: Personal Nexus
 
+## Completed Milestones
+
+- ✅ [v1.0 MVP](milestones/v1.0-ROADMAP.md) (Phases 1-8) — SHIPPED 2026-01-14
+
 ## Overview
 
-Personal Nexus delivers a modular personal dashboard with SMS-first expense tracking. The journey starts with foundational Next.js architecture supporting future modules, builds the Supabase backend and budget management core, implements manual transaction entry, adds the critical SMS logging integration via Twilio, provides spending analytics and visualization, finishes with mobile-responsive polish for on-the-go usage, and culminates with a distinctive UI overhaul that transforms the aesthetic into something memorable and delightful.
+Personal Nexus delivers a modular personal dashboard with SMS-first expense tracking. v1.0 MVP delivered the Finance module with SMS integration, analytics, and Tokyo Night design system.
 
 ## Domain Expertise
 
@@ -16,6 +20,9 @@ None
 
 Decimal phases appear between their surrounding integers in numeric order.
 
+<details>
+<summary>✅ v1.0 MVP (Phases 1-8) — SHIPPED 2026-01-14</summary>
+
 - [x] **Phase 1: Foundation** - Next.js project setup with modular architecture
 - [x] **Phase 2: Supabase Backend** - Database schema and API integration
 - [x] **Phase 3: Budget Management** - Budget creation and category management UI
@@ -25,7 +32,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Mobile Polish** - Mobile-responsive optimization and UX refinement
 - [x] **Phase 8: UI Overhaul** - Distinctive design system with unique typography, motion, and aesthetics
 
+[See full details in milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md)
+
+</details>
+
 ## Phase Details
+
+<details>
+<summary>✅ v1.0 MVP Phase Details (Archived) — See milestones/v1.0-ROADMAP.md</summary>
 
 ### Phase 1: Foundation
 **Goal**: Establish Next.js project with modular architecture and base layout
@@ -123,7 +137,9 @@ Plans:
 - Components: shadcn/ui as foundation, customized with unique aesthetic
 - Minimalist but distinctive: Clean layouts with unexpected, delightful touches
 
-## Progress
+</details>
+
+## Progress (v1.0 MVP — Complete)
 
 **Execution Order:**
 Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
