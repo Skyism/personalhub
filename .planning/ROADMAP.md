@@ -59,11 +59,12 @@ Plans:
 **Goal**: Build settings page for configuring morning/night reminders with message editing and time selection
 **Depends on**: Phase 9
 **Research**: Unlikely (CRUD UI with existing patterns)
-**Plans**: 2
+**Status**: Complete
+**Plans**: 2/2 complete
 
 Plans:
 - [x] 10-01: Settings page foundation with morning reminder form (completed 2026-01-14)
-- [ ] 10-02: Night reminder configuration with message list management
+- [x] 10-02: Night reminder configuration with message list management (completed 2026-01-15)
 
 #### Phase 11: Scheduler Setup
 
@@ -213,7 +214,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. Mobile Polish | v1.0 | 3/3 | Complete | 2026-01-14 |
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
 | 9. Skincare Schema | v1.1 | 1/1 | Complete | 2026-01-15 |
-| 10. Settings UI | v1.1 | 0/? | Not started | - |
+| 10. Settings UI | v1.1 | 2/2 | Complete | 2026-01-15 |
 | 11. Scheduler Setup | v1.1 | 0/? | Not started | - |
 | 12. SMS Reminders | v1.1 | 0/? | Not started | - |
 | 13. Polish & Edge Cases | v1.1 | 0/? | Not started | - |
