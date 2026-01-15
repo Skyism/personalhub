@@ -125,6 +125,36 @@ export type Database = {
         }
         Relationships: []
       }
+      reminder_log: {
+        Row: {
+          created_at: string | null
+          date: string
+          error: string | null
+          id: string
+          message_sid: string | null
+          status: string
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          error?: string | null
+          id?: string
+          message_sid?: string | null
+          status: string
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          error?: string | null
+          id?: string
+          message_sid?: string | null
+          status?: string
+          type?: string
+        }
+        Relationships: []
+      }
       skincare_settings: {
         Row: {
           created_at: string
