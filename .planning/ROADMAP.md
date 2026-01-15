@@ -70,12 +70,14 @@ Plans:
 
 **Goal**: Implement cron job or scheduled task system for triggering daily SMS sends
 **Depends on**: Phase 10
-**Research**: Likely (new scheduled jobs infrastructure)
+**Research**: Complete (11-RESEARCH.md created 2026-01-15)
 **Research topics**: Next.js cron job approaches (Vercel Cron, cron-job.org webhooks, node-cron), scheduled task patterns for production, idempotent job execution
-**Plans**: TBD
+**Status**: Planned
+**Plans**: 2/2 planned
 
 Plans:
-- [ ] 11-01: TBD
+- [ ] 11-01: Database & Morning Reminder (reminder_log table, morning cron endpoint with CRON_SECRET)
+- [ ] 11-02: Night Reminder & Deployment (night cron endpoint with message rotation, vercel.json config)
 
 #### Phase 12: SMS Reminders
 
