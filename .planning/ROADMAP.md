@@ -48,10 +48,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: Create database schema for reminder settings, morning message, and night messages list
 **Depends on**: v1.0 complete
 **Research**: Unlikely (established Supabase patterns from Finance module)
-**Plans**: TBD
+**Status**: Complete
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 09-01: TBD (run /gsd:plan-phase 9 to break down)
+- [x] **09-01-PLAN.md** - Skincare Schema (skincare_settings and night_messages tables with RLS) - Completed 2026-01-15
 
 #### Phase 10: Settings UI
 
@@ -210,7 +211,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. Analytics Dashboard | v1.0 | 3/3 | Complete | 2026-01-13 |
 | 7. Mobile Polish | v1.0 | 3/3 | Complete | 2026-01-14 |
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
-| 9. Skincare Schema | v1.1 | 0/? | Not started | - |
+| 9. Skincare Schema | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Settings UI | v1.1 | 0/? | Not started | - |
 | 11. Scheduler Setup | v1.1 | 0/? | Not started | - |
 | 12. SMS Reminders | v1.1 | 0/? | Not started | - |
