@@ -5,12 +5,12 @@
 See: .planning/PROJECT.md (updated 2026-01-14)
 
 **Core value:** The ability to text an expense and instantly see it reflected in the dashboard - removing all friction from expense tracking.
-**Current focus:** v1.1 Skincare Module — Ready to plan Phase 9
+**Current focus:** v1.1 Skincare Reminders — Ready to plan Phase 9
 
 ## Current Position
 
-Milestone: v1.1 Skincare Module
-Phase: 9 of 14 (Skincare Foundation)
+Milestone: v1.1 Skincare Reminders
+Phase: 9 of 13 (Skincare Schema)
 Plan: Not started
 Status: Ready to plan
 Last activity: 2026-01-14 — Milestone v1.1 created
@@ -59,7 +59,7 @@ All decisions logged in PROJECT.md Key Decisions table. Key v1.0 decisions:
 
 ### Roadmap Evolution
 
-- Milestone v1.1 created: Skincare Module, 6 phases (Phase 9-14)
+- Milestone v1.1 created: Skincare Reminders (SMS notifications), 5 phases (Phase 9-13)
 
 ### Deferred Issues
 
@@ -76,4 +76,4 @@ None (cleared for v1.1 start)
 Last session: 2026-01-14
 Stopped at: Milestone v1.1 initialization
 Resume file: None
-Next action: Plan Phase 9 (Skincare Foundation)
+Next action: Plan Phase 9 (Skincare Schema)
