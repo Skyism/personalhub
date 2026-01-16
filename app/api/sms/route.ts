@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache'
 import twilio from 'twilio'
 import { parseSMS } from '@/lib/twilio/parser'
 import { createClient } from '@/lib/supabase/server'
+import { findOrCreateCurrentWantsBudget, createWantsTransaction } from '@/lib/wants/queries'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -65,18 +66,77 @@ export async function POST(request: NextRequest) {
   }
 
   // Parse SMS body to extract amount and note
-  const { amount, note } = parseSMS(smsBody)
+  const parseResult = parseSMS(smsBody)
 
-  if (!amount) {
+  if (!parseResult.amount) {
     // Could not parse amount - send error message back to user
     console.error('Failed to parse amount from SMS:', smsBody)
     return new NextResponse(
-      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee at starbucks"</Message></Response>',
+      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee at starbucks" or "wants 25 coffee"</Message></Response>',
       {
         headers: { 'Content-Type': 'text/xml' },
       }
     )
   }
+
+  // Handle wants transactions
+  if (parseResult.type === 'wants') {
+    const { budget } = await findOrCreateCurrentWantsBudget()
+
+    if (!budget) {
+      // No wants budget configured for current period
+      console.error('No wants budget found for current period')
+      const twiml = `<?xml version="1.0" encoding="UTF-8"?><Response><Message>No wants budget set up for current period. Visit app to configure.</Message></Response>`
+      return new NextResponse(twiml, {
+        status: 200,
+        headers: { 'Content-Type': 'text/xml' }
+      })
+    }
+
+    // Check idempotency for wants_transactions
+    const { data: existingWants } = await supabase
+      .from('wants_transactions')
+      .select('id')
+      .eq('twilio_message_id', MessageSid)
+      .maybeSingle()
+
+    if (existingWants) {
+      console.log('Duplicate wants SMS detected:', MessageSid)
+      return new NextResponse(
+        '<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
+        {
+          status: 200,
+          headers: { 'Content-Type': 'text/xml' }
+        }
+      )
+    }
+
+    // Create wants transaction
+    await createWantsTransaction({
+      wantsBudgetId: budget.id,
+      amount: parseResult.amount,
+      note: parseResult.note || null,
+      twilioMessageId: MessageSid,
+      twilioFrom: From,
+    })
+
+    console.log('Wants transaction created via SMS:', {
+      MessageSid,
+      amount: parseResult.amount,
+      note: parseResult.note,
+    })
+
+    // Return empty TwiML response (silent success)
+    return new NextResponse(
+      '<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
+      {
+        headers: { 'Content-Type': 'text/xml' },
+      }
+    )
+  }
+
+  // Regular transaction flow continues below
+  const { amount, note } = parseResult
 
   // Get most recent budget for this user
   const { data: budget, error: budgetError } = await supabase
