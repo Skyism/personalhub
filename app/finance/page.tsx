@@ -15,6 +15,14 @@ export default function FinancePage() {
             <h2 className="text-xl font-semibold text-foreground mb-2">Budgets</h2>
             <p className="text-muted-foreground">View and manage your monthly budgets</p>
           </Link>
+
+          <Link
+            href="/finance/wants"
+            className="block p-6 bg-card rounded-lg shadow hover:shadow-md transition-shadow border border-border"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-2">Wants Budget</h2>
+            <p className="text-muted-foreground">Track semi-annual wants spending (Jan-Jun, Jul-Dec)</p>
+          </Link>
         </div>
       </div>
     </div>
