@@ -66,3 +66,17 @@ export async function updateWantsTransaction(transactionId: number, amount: numb
   revalidatePath('/finance/wants');
   return { success: true };
 }
+
+export async function deleteWantsTransaction(transactionId: number) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('wants_transactions')
+    .delete()
+    .eq('id', transactionId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath('/finance/wants');
+  return { success: true };
+}
