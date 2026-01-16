@@ -52,7 +52,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 8.1-01: Database Schema (wants_budgets and wants_transactions tables with period utilities) - Completed 2026-01-15
 - [x] 8.1-02: SMS Integration Extension (extend parser for "wants" keyword, route to wants transactions) - Completed 2026-01-15
-- [ ] 8.1-03: Budget UI Foundation (setup page, overview with progress, navigation integration)
+- [x] 8.1-03: Budget UI Foundation (setup page, overview with progress, navigation integration) - Completed 2026-01-15
 - [ ] 8.1-04: Transaction CRUD (list, add, edit, delete with Server Actions)
 
 **Details:**
@@ -239,7 +239,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. Analytics Dashboard | v1.0 | 3/3 | Complete | 2026-01-13 |
 | 7. Mobile Polish | v1.0 | 3/3 | Complete | 2026-01-14 |
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
-| **8.1. Wants Budget (URGENT)** | Finance | 2/4 | In progress | - |
+| **8.1. Wants Budget (URGENT)** | Finance | 3/4 | In progress | - |
 | 9. Skincare Schema | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Settings UI | v1.1 | 2/2 | Complete | 2026-01-15 |
 | 11. Scheduler Setup | v1.1 | 2/2 | Complete | 2026-01-15 |
