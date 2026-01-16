@@ -5,24 +5,24 @@
 See: .planning/PROJECT.md (updated 2026-01-14)
 
 **Core value:** The ability to text an expense and instantly see it reflected in the dashboard - removing all friction from expense tracking.
-**Current focus:** v1.1 Skincare Reminders — Ready to plan Phase 9
+**Current focus:** Phase 8.1 Semi-Annual Wants Budget (urgent insertion)
 
 ## Current Position
 
-Milestone: v1.1 Skincare Reminders
-Phase: 11 of 13 (Scheduler Setup)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-01-15 — Completed 11-02-PLAN.md
+Milestone: Finance (urgent Phase 8.1)
+Phase: 8.1 of 13 (Semi-Annual Wants Budget)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-15 — Completed 8.1-01-PLAN.md
 
-Progress: ████░░░░░░ 33%
+Progress: █░░░░░░░░░ 25% (Phase 8.1 only)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 23
-- Average duration: 77.0 minutes
-- Total execution time: 29.5 hours
+- Total plans completed: 24
+- Average duration: 75.2 minutes
+- Total execution time: 30.1 hours
 
 **By Phase:**
 
@@ -36,12 +36,13 @@ Progress: ████░░░░░░ 33%
 | 6. Analytics Dashboard | 3 | 11 min | 3.7 min |
 | 7. Mobile Polish | 3 | 235 min | 78.3 min |
 | 8. UI Overhaul | 3 | 534 min | 178 min |
+| 8.1. Wants Budget | 1 | 10 min | 10 min |
 | 9. Skincare Schema | 1 | 10 min | 10 min |
 | 10. Settings UI | 2 | 33 min | 16.5 min |
 | 11. Scheduler Setup | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 9-01 (10 min), 10-01 (18 min), 10-02 (15 min), 11-01 (3 min), 11-02 (2 min)
+- Last 5 plans: 10-01 (18 min), 10-02 (15 min), 11-01 (3 min), 11-02 (2 min), 8.1-01 (10 min)
 - Note: Phase 5 and 8-03 durations include checkpoint reviews and user feedback iterations
 
 ## Accumulated Context
@@ -77,7 +78,7 @@ None (cleared for v1.1 start)
 
 ## Session Continuity
 
-Last session: 2026-01-15T04:04:55Z
-Stopped at: Created Phase 8.1 plans (Semi-Annual Wants Budget) - 4 plans, 11 tasks, ready for execution
+Last session: 2026-01-15T08:30:00Z
+Stopped at: Completed 8.1-01-PLAN.md (Wants Budget Database Schema)
 Resume file: None
-Next action: Execute 8.1-01-PLAN.md or continue Phase 12 planning
+Next action: Execute 8.1-02-PLAN.md (SMS Integration Extension)
