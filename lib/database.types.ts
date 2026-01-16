@@ -248,6 +248,83 @@ export type Database = {
           },
         ]
       }
+      wants_budgets: {
+        Row: {
+          created_at: string | null
+          id: number
+          period_end: string
+          period_start: string
+          total_amount: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: never
+          period_end: string
+          period_start: string
+          total_amount: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: never
+          period_end?: string
+          period_start?: string
+          total_amount?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wants_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: number
+          note: string | null
+          source: string
+          transaction_date: string | null
+          twilio_message_id: string | null
+          updated_at: string | null
+          user_id: string
+          wants_budget_id: number
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: never
+          note?: string | null
+          source?: string
+          transaction_date?: string | null
+          twilio_message_id?: string | null
+          updated_at?: string | null
+          user_id: string
+          wants_budget_id: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: never
+          note?: string | null
+          source?: string
+          transaction_date?: string | null
+          twilio_message_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+          wants_budget_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wants_transactions_wants_budget_id_fkey"
+            columns: ["wants_budget_id"]
+            isOneToOne: false
+            referencedRelation: "wants_budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
