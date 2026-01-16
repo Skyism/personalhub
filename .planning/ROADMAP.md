@@ -39,6 +39,30 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ## Phase Details
 
+### 🔧 Urgent Insertions
+
+#### Phase 8.1: Semi-Annual Wants Budget (INSERTED)
+
+**Goal**: Add semi-annual "wants" budget tracking outside monthly budgets with 6-month periods (Jan-Jun, Jul-Dec), SMS transaction support, and full CRUD operations
+**Depends on**: Phase 8 (UI Overhaul - v1.0 complete)
+**Research**: Complete (analyzed existing Finance schema and SMS integration patterns)
+**Status**: Planned, ready for execution
+**Plans**: 4/4 planned
+
+Plans:
+- [ ] 8.1-01: Database Schema (wants_budgets and wants_transactions tables with period utilities)
+- [ ] 8.1-02: SMS Integration Extension (extend parser for "wants" keyword, route to wants transactions)
+- [ ] 8.1-03: Budget UI Foundation (setup page, overview with progress, navigation integration)
+- [ ] 8.1-04: Transaction CRUD (list, add, edit, delete with Server Actions)
+
+**Details:**
+Urgent Finance module enhancement requested mid-milestone. Extends budget tracking to support:
+- Semi-annual "wants" categories with fixed amounts per half-year period
+- Separate from monthly budget system (parallel tracking)
+- Full SMS integration via existing Twilio endpoint
+- CRUD operations for transactions in wants categories
+- Period-based rollover (Jan-Jun and Jul-Dec)
+
 ### 🚧 v1.1 Skincare Reminders (In Progress)
 
 **Milestone Goal:** Automated SMS reminders for morning and night skincare routines via Twilio, with customizable messages and scheduling.
@@ -203,7 +227,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → **8.1** → 9 → 10 → 11 → 12 → 13
 
 | Phase | Milestone | Plans | Status | Completed |
 |-------|-----------|-------|--------|-----------|
@@ -215,8 +239,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. Analytics Dashboard | v1.0 | 3/3 | Complete | 2026-01-13 |
 | 7. Mobile Polish | v1.0 | 3/3 | Complete | 2026-01-14 |
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
+| **8.1. Wants Budget (URGENT)** | Finance | 0/4 | Planned | - |
 | 9. Skincare Schema | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Settings UI | v1.1 | 2/2 | Complete | 2026-01-15 |
-| 11. Scheduler Setup | v1.1 | 0/? | Not started | - |
+| 11. Scheduler Setup | v1.1 | 2/2 | Complete | 2026-01-15 |
 | 12. SMS Reminders | v1.1 | 0/? | Not started | - |
 | 13. Polish & Edge Cases | v1.1 | 0/? | Not started | - |

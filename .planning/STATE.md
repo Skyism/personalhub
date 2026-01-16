@@ -63,6 +63,7 @@ All decisions logged in PROJECT.md Key Decisions table. Key v1.0 decisions:
 ### Roadmap Evolution
 
 - Milestone v1.1 created: Skincare Reminders (SMS notifications), 5 phases (Phase 9-13)
+- Phase 8.1 inserted after Phase 8: Semi-Annual Wants Budget (URGENT) - Finance module enhancement for 6-month budget periods outside monthly tracking
 
 ### Deferred Issues
 
@@ -77,6 +78,6 @@ None (cleared for v1.1 start)
 ## Session Continuity
 
 Last session: 2026-01-15T04:04:55Z
-Stopped at: Completed 11-02-PLAN.md (Night Reminder & Vercel Cron) — Phase 11 complete
+Stopped at: Created Phase 8.1 plans (Semi-Annual Wants Budget) - 4 plans, 11 tasks, ready for execution
 Resume file: None
-Next action: Plan Phase 12 (SMS Reminders)
+Next action: Execute 8.1-01-PLAN.md or continue Phase 12 planning
