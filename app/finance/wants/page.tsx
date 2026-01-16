@@ -17,15 +17,19 @@ export default async function WantsPage() {
     .eq('period_start', period.periodStart)
     .maybeSingle();
 
-  // Fetch total spent this period
+  // Fetch total spent this period and transactions
   let totalSpent = 0;
+  let transactions: any[] = [];
   if (budget) {
-    const { data: transactions } = await supabase
+    const { data } = await supabase
       .from('wants_transactions')
-      .select('amount')
-      .eq('wants_budget_id', budget.id);
+      .select('id, amount, note, transaction_date, source, created_at')
+      .eq('wants_budget_id', budget.id)
+      .order('transaction_date', { ascending: false })
+      .order('created_at', { ascending: false });
 
-    totalSpent = transactions?.reduce((sum, t) => sum + Number(t.amount), 0) ?? 0;
+    transactions = data ?? [];
+    totalSpent = transactions.reduce((sum, t) => sum + Number(t.amount), 0);
   }
 
   return (
@@ -38,7 +42,7 @@ export default async function WantsPage() {
       {!budget ? (
         <WantsBudgetForm period={period} />
       ) : (
-        <WantsOverview budget={budget} totalSpent={totalSpent} period={period} />
+        <WantsOverview budget={budget} totalSpent={totalSpent} period={period} transactions={transactions} />
       )}
     </div>
   );
