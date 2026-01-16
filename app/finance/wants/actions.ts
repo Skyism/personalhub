@@ -34,3 +34,35 @@ export async function updateWantsBudget(budgetId: number, totalAmount: number) {
   revalidatePath('/finance/wants');
   return { success: true };
 }
+
+export async function createWantsTransaction(budgetId: number, amount: number, note: string | null, transactionDate: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('wants_transactions').insert({
+    user_id: TEMP_USER_ID,
+    wants_budget_id: budgetId,
+    amount,
+    note,
+    transaction_date: transactionDate,
+    source: 'manual',
+  });
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath('/finance/wants');
+  return { success: true };
+}
+
+export async function updateWantsTransaction(transactionId: number, amount: number, note: string | null, transactionDate: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('wants_transactions')
+    .update({ amount, note, transaction_date: transactionDate, updated_at: new Date().toISOString() })
+    .eq('id', transactionId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath('/finance/wants');
+  return { success: true };
+}
