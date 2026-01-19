@@ -174,12 +174,12 @@ Database schema to store:
 **Goal**: Build UI for editing routines - configure morning and night routines for each day of the week
 **Depends on**: Phase 9.1
 **Research**: Skipped (CRUD UI with existing Finance patterns)
-**Status**: Ready for execution
-**Plans**: 2/2 created
+**Status**: Complete
+**Plans**: 2/2 complete
 
 Plans:
-- [ ] 9.2-01: Routine Management Foundation (Server Actions, day selector, home navigation)
-- [ ] 9.2-02: Routine Step Editor (add, edit, delete, reorder steps with save)
+- [x] 9.2-01: Routine Management Foundation (Server Actions, day selector, home navigation) - Completed 2026-01-19
+- [x] 9.2-02: Routine Step Editor (add, edit, delete, reorder steps with save) - Completed 2026-01-19
 
 **Details:**
 Settings/edit page where users can:
@@ -188,6 +188,8 @@ Settings/edit page where users can:
 - Edit night routine steps (add, edit, delete, reorder)
 - Save changes to database
 - Copy routines between days (optional convenience feature)
+
+**Result:** Phase 9.2 complete. All plans executed successfully. Full routine management UI shipped with Server Actions (getRoutines, upsertRoutine, deleteRoutine), day selector with 7-day navigation, RoutineEditor component with add/edit/delete/reorder/save operations, and home page Skincare module navigation. Manual verification confirmed all CRUD operations work correctly and data persists across page refreshes and day switching.
 
 #### Phase 9.3: Routine Display View
 
@@ -333,5 +335,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 12. SMS Reminders | v1.1 | - | REMOVED | - |
 | 13. Polish & Edge Cases | v1.1 | - | REMOVED | - |
 | **9.1. Routine Schema** | v1.1 | 1/1 | Complete | 2026-01-19 |
-| **9.2. Routine Management UI** | v1.1 | 0/2 | Ready | - |
+| **9.2. Routine Management UI** | v1.1 | 2/2 | Complete | 2026-01-19 |
 | **9.3. Routine Display View** | v1.1 | 0/? | Not started | - |
