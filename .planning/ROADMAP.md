@@ -98,65 +98,115 @@ Critical UX gaps identified in current navigation:
 
 **Result:** Phase 8.2 complete. All plans executed successfully. Complete hierarchical navigation system shipped with home page module cards, dynamic breadcrumbs with W3C ARIA accessibility, TopAppBar with back button integration across all Finance pages, and desktop sidebar navigation. Solves all critical UX gaps: users can now navigate from home to modules, desktop has visible navigation, clear back button behavior, and breadcrumb context throughout the app.
 
-### 🚧 v1.1 Skincare Reminders (In Progress)
+### 🔄 v1.1 Skincare Routine Tracker (Pivoted)
 
-**Milestone Goal:** Automated SMS reminders for morning and night skincare routines via Twilio, with customizable messages and scheduling.
+**Milestone Goal:** Daily skincare routine tracker with customizable Monday-Sunday schedule for morning and night routines. Display today's routine for quick reference.
 
-#### Phase 9: Skincare Schema
+**Status:** PIVOTED from SMS reminders (Phases 9-11 deprecated). New implementation starting with Phase 9.1.
 
-**Goal**: Create database schema for reminder settings, morning message, and night messages list
-**Depends on**: v1.0 complete
+#### Phase 9: Skincare Schema (DEPRECATED)
+
+**Goal**: ~~Create database schema for reminder settings, morning message, and night messages list~~
+**Status**: DEPRECATED - Milestone pivoted from SMS reminders to routine tracker
+**Plans**: 1/1 complete (deprecated implementation)
+
+Plans:
+- [x] **09-01-PLAN.md** - Skincare Schema (skincare_settings and night_messages tables with RLS) - Completed 2026-01-15 (DEPRECATED)
+
+**Note:** This phase built SMS reminder schema. Use Phase 9.1 for routine tracker schema instead.
+
+#### Phase 10: Settings UI (DEPRECATED)
+
+**Goal**: ~~Build settings page for configuring morning/night reminders with message editing and time selection~~
+**Status**: DEPRECATED - Milestone pivoted from SMS reminders to routine tracker
+**Plans**: 2/2 complete (deprecated implementation)
+
+Plans:
+- [x] 10-01: Settings page foundation with morning reminder form (completed 2026-01-14) (DEPRECATED)
+- [x] 10-02: Night reminder configuration with message list management (completed 2026-01-15) (DEPRECATED)
+
+**Note:** This phase built SMS reminder UI. Use Phase 9.1 series for routine tracker UI instead.
+
+#### Phase 11: Scheduler Setup (DEPRECATED)
+
+**Goal**: ~~Implement cron job or scheduled task system for triggering daily SMS sends~~
+**Status**: DEPRECATED - No longer needed for routine tracker (no SMS reminders)
+**Plans**: 2/2 complete (deprecated implementation)
+
+Plans:
+- [x] 11-01: Database & Morning Reminder (reminder_log table, morning cron endpoint with CRON_SECRET) - Completed 2026-01-15 (DEPRECATED)
+- [x] 11-02: Night Reminder & Deployment (night cron endpoint with message rotation, vercel.json config) - Completed 2026-01-15 (DEPRECATED)
+
+**Note:** This phase built cron endpoints for SMS. Not needed for routine display tracker.
+
+#### Phase 12: SMS Reminders (REMOVED)
+
+**Status**: REMOVED - Milestone pivoted to routine tracker (no SMS functionality needed)
+
+#### Phase 13: Polish & Edge Cases (REMOVED)
+
+**Status**: REMOVED - Milestone pivoted to routine tracker
+
+---
+
+### New Phases for Routine Tracker
+
+#### Phase 9.1: Skincare Routine Schema
+
+**Goal**: Create database schema for storing daily routines (Monday-Sunday) with morning and night routine steps for each day
+**Depends on**: Phase 8.2 (Navigation complete)
 **Research**: Unlikely (established Supabase patterns from Finance module)
-**Status**: Complete
-**Plans**: 1/1 complete
+**Status**: Not started
+**Plans**: TBD
 
 Plans:
-- [x] **09-01-PLAN.md** - Skincare Schema (skincare_settings and night_messages tables with RLS) - Completed 2026-01-15
+- [ ] 9.1-01: TBD (run /gsd:plan-phase 9.1 to break down)
 
-#### Phase 10: Settings UI
+**Details:**
+Database schema to store:
+- User's weekly routine (7 days × 2 time periods = 14 routine slots)
+- Each routine slot contains list of steps/products
+- Schema options: JSON column, separate routine_steps table, or day-specific columns
+- Must support: add/edit/delete steps, reorder steps, mark as complete (optional)
 
-**Goal**: Build settings page for configuring morning/night reminders with message editing and time selection
-**Depends on**: Phase 9
+#### Phase 9.2: Routine Management UI
+
+**Goal**: Build UI for editing routines - configure morning and night routines for each day of the week
+**Depends on**: Phase 9.1
 **Research**: Unlikely (CRUD UI with existing patterns)
-**Status**: Complete
-**Plans**: 2/2 complete
-
-Plans:
-- [x] 10-01: Settings page foundation with morning reminder form (completed 2026-01-14)
-- [x] 10-02: Night reminder configuration with message list management (completed 2026-01-15)
-
-#### Phase 11: Scheduler Setup
-
-**Goal**: Implement cron job or scheduled task system for triggering daily SMS sends
-**Depends on**: Phase 10
-**Research**: Complete (11-RESEARCH.md created 2026-01-15)
-**Research topics**: Next.js cron job approaches (Vercel Cron, cron-job.org webhooks, node-cron), scheduled task patterns for production, idempotent job execution
-**Status**: Complete
-**Plans**: 2/2 complete
-
-Plans:
-- [x] 11-01: Database & Morning Reminder (reminder_log table, morning cron endpoint with CRON_SECRET) - Completed 2026-01-15
-- [x] 11-02: Night Reminder & Deployment (night cron endpoint with message rotation, vercel.json config) - Completed 2026-01-15
-
-#### Phase 12: SMS Reminders
-
-**Goal**: Integrate Twilio SMS sending with scheduler for morning/night reminders with message rotation
-**Depends on**: Phase 11
-**Research**: Unlikely (Twilio integration established in Finance Phase 5)
+**Status**: Not started
 **Plans**: TBD
 
 Plans:
-- [ ] 12-01: TBD
+- [ ] 9.2-01: TBD
 
-#### Phase 13: Polish & Edge Cases
+**Details:**
+Settings/edit page where users can:
+- Select day of week (Monday-Sunday tabs or dropdown)
+- Edit morning routine steps (add, edit, delete, reorder)
+- Edit night routine steps (add, edit, delete, reorder)
+- Save changes to database
+- Copy routines between days (optional convenience feature)
 
-**Goal**: Handle edge cases, error logging, character limit warnings, retry logic, and UI validation
-**Depends on**: Phase 12
-**Research**: Unlikely (error handling and validation with existing patterns)
+#### Phase 9.3: Routine Display View
+
+**Goal**: Build main Skincare module view that displays today's routine (or selected day) for morning and night
+**Depends on**: Phase 9.2
+**Research**: Unlikely (display patterns established)
+**Status**: Not started
 **Plans**: TBD
 
 Plans:
-- [ ] 13-01: TBD
+- [ ] 9.3-01: TBD
+
+**Details:**
+Main skincare page (/skincare) showing:
+- Today's date and day of week prominently displayed
+- Morning routine section with list of steps
+- Night routine section with list of steps
+- Day selector to view other days' routines
+- Link/button to edit routines (navigate to Phase 9.2 UI)
+- Optional: checkboxes to mark steps as complete (ephemeral, doesn't persist)
 
 <details>
 <summary>✅ v1.0 MVP Phase Details (Archived) — See milestones/v1.0-ROADMAP.md</summary>
@@ -276,8 +326,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
 | **8.1. Wants Budget (URGENT)** | Finance | 4/4 | Complete | 2026-01-15 |
 | **8.2. Navigation System (URGENT)** | UX | 3/3 | Complete | 2026-01-19 |
-| 9. Skincare Schema | v1.1 | 1/1 | Complete | 2026-01-15 |
-| 10. Settings UI | v1.1 | 2/2 | Complete | 2026-01-15 |
-| 11. Scheduler Setup | v1.1 | 2/2 | Complete | 2026-01-15 |
-| 12. SMS Reminders | v1.1 | 0/? | Not started | - |
-| 13. Polish & Edge Cases | v1.1 | 0/? | Not started | - |
+| 9. Skincare Schema | v1.1 | 1/1 | DEPRECATED | 2026-01-15 |
+| 10. Settings UI | v1.1 | 2/2 | DEPRECATED | 2026-01-15 |
+| 11. Scheduler Setup | v1.1 | 2/2 | DEPRECATED | 2026-01-15 |
+| 12. SMS Reminders | v1.1 | - | REMOVED | - |
+| 13. Polish & Edge Cases | v1.1 | - | REMOVED | - |
+| **9.1. Routine Schema** | v1.1 | 0/? | Not started | - |
+| **9.2. Routine Management UI** | v1.1 | 0/? | Not started | - |
+| **9.3. Routine Display View** | v1.1 | 0/? | Not started | - |

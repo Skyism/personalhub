@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Personal Nexus is a modular personal dashboard for tracking life metrics across multiple domains. The Finance module is the v1 MVP, providing budget tracking, transaction logging via SMS, and spending analytics. Future modules will cover Skincare and Fitness tracking.
+Personal Nexus is a modular personal dashboard for tracking life metrics across multiple domains. The Finance module is the v1 MVP, providing budget tracking, transaction logging via SMS, and spending analytics. The Skincare module provides daily routine tracking with customizable morning and night routines for each day of the week. Future modules will cover Fitness tracking.
 
 ## Core Value
 
@@ -24,12 +24,15 @@ The ability to text an expense and instantly see it reflected in the dashboard -
 ### Active
 
 - [ ] Authentication system to replace TEMP_USER_ID workarounds and restore proper RLS policies
+- [ ] Skincare module: Daily routine tracker with Monday-Sunday schedule for morning and night routines
+- [ ] Skincare module: Main view showing today's routine (or selected day) for quick reference
 
 ### Out of Scope
 
 - Multi-user functionality or shared budgets — v1 is single-user only
 - Recurring transactions or automatic monthly bill logging — manual entry only in v1
-- Skincare and Fitness module implementation — architecture supports them, but Finance only for v1
+- Skincare SMS reminders — pivoted to routine display tracker instead
+- Fitness module implementation — deferred to future milestone
 - Complex authentication flows — start with simple Supabase auth
 
 ## Context
