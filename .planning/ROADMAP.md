@@ -173,12 +173,13 @@ Database schema to store:
 
 **Goal**: Build UI for editing routines - configure morning and night routines for each day of the week
 **Depends on**: Phase 9.1
-**Research**: Unlikely (CRUD UI with existing patterns)
-**Status**: Not started
-**Plans**: TBD
+**Research**: Skipped (CRUD UI with existing Finance patterns)
+**Status**: Ready for execution
+**Plans**: 2/2 created
 
 Plans:
-- [ ] 9.2-01: TBD
+- [ ] 9.2-01: Routine Management Foundation (Server Actions, day selector, home navigation)
+- [ ] 9.2-02: Routine Step Editor (add, edit, delete, reorder steps with save)
 
 **Details:**
 Settings/edit page where users can:
@@ -331,6 +332,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 11. Scheduler Setup | v1.1 | 2/2 | DEPRECATED | 2026-01-15 |
 | 12. SMS Reminders | v1.1 | - | REMOVED | - |
 | 13. Polish & Edge Cases | v1.1 | - | REMOVED | - |
-| **9.1. Routine Schema** | v1.1 | 0/? | Not started | - |
-| **9.2. Routine Management UI** | v1.1 | 0/? | Not started | - |
+| **9.1. Routine Schema** | v1.1 | 1/1 | Complete | 2026-01-19 |
+| **9.2. Routine Management UI** | v1.1 | 0/2 | Ready | - |
 | **9.3. Routine Display View** | v1.1 | 0/? | Not started | - |
