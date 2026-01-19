@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import DesktopNav from "@/components/navigation/DesktopNav";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -44,7 +45,12 @@ export default function RootLayout({
           enableSystem={false}
           storageKey="personalhub-theme"
         >
-          {children}
+          <div className="flex min-h-screen">
+            <DesktopNav />
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
           <ThemeToggle />
         </ThemeProvider>
       </body>
