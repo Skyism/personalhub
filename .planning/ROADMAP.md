@@ -65,6 +65,39 @@ Urgent Finance module enhancement requested mid-milestone. Extends budget tracki
 
 **Result:** Phase 8.1 complete. All plans executed successfully. Full wants budget feature shipped with database schema, SMS integration, UI with progress tracking, and complete transaction CRUD operations.
 
+#### Phase 8.2: Hierarchical Navigation System (INSERTED)
+
+**Goal**: Add hierarchical navigation system with breadcrumbs, top app bar with back button, desktop navigation component, and home page module links for complete navigation between app home, Finance module, and all subpages
+**Depends on**: Phase 8.1 (Wants Budget - navigation integration points created)
+**Research**: Complete (8.2-RESEARCH.md created 2026-01-16)
+**Status**: Complete
+**Plans**: 3/3 complete
+
+Plans:
+- [x] 8.2-01: Home Page & Navigation Foundation (module cards, fix BottomNav routing) - Completed 2026-01-19
+- [x] 8.2-02: Breadcrumb & Top App Bar System (dynamic breadcrumbs, back button, TopAppBar integration) - Completed 2026-01-19
+- [x] 8.2-03: Desktop Navigation (DesktopNav sidebar, responsive layout grid) - Completed 2026-01-19
+
+**Details:**
+Critical UX gaps identified in current navigation:
+- No navigation from home page to Finance module (users must type URL manually)
+- Desktop users have no navigation (BottomNav hidden on lg+ screens)
+- No way to return to app home from Finance pages (trapped in module)
+- Inconsistent/missing back buttons across subpages
+- No breadcrumbs for hierarchical context
+- Broken navigation structure (Analytics "Back to Budgets", Categories broken breadcrumb)
+
+**Target improvements:**
+- Home page navigation cards to modules (Finance, future: Skincare/Fitness)
+- Top app bar with back button for all subpages
+- Dynamic breadcrumb component (mobile: last 2 items, desktop: full trail)
+- Desktop navigation (sidebar or top nav) paralleling BottomNav
+- Fix BottomNav "Home" to navigate to app root (/)
+- Consistent back button behavior across all pages
+- Clear visual hierarchy: App > Module > Section > Detail
+
+**Result:** Phase 8.2 complete. All plans executed successfully. Complete hierarchical navigation system shipped with home page module cards, dynamic breadcrumbs with W3C ARIA accessibility, TopAppBar with back button integration across all Finance pages, and desktop sidebar navigation. Solves all critical UX gaps: users can now navigate from home to modules, desktop has visible navigation, clear back button behavior, and breadcrumb context throughout the app.
+
 ### 🚧 v1.1 Skincare Reminders (In Progress)
 
 **Milestone Goal:** Automated SMS reminders for morning and night skincare routines via Twilio, with customizable messages and scheduling.
@@ -229,7 +262,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → **8.1** → 9 → 10 → 11 → 12 → 13
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → **8.1** → **8.2** → 9 → 10 → 11 → 12 → 13
 
 | Phase | Milestone | Plans | Status | Completed |
 |-------|-----------|-------|--------|-----------|
@@ -241,7 +274,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. Analytics Dashboard | v1.0 | 3/3 | Complete | 2026-01-13 |
 | 7. Mobile Polish | v1.0 | 3/3 | Complete | 2026-01-14 |
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
-| **8.1. Wants Budget (URGENT)** | Finance | 3/4 | In progress | - |
+| **8.1. Wants Budget (URGENT)** | Finance | 4/4 | Complete | 2026-01-15 |
+| **8.2. Navigation System (URGENT)** | UX | 3/3 | Complete | 2026-01-19 |
 | 9. Skincare Schema | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Settings UI | v1.1 | 2/2 | Complete | 2026-01-15 |
 | 11. Scheduler Setup | v1.1 | 2/2 | Complete | 2026-01-15 |
