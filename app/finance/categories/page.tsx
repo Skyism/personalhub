@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import CategoryCard from './CategoryCard'
 import CreateCategoryForm from './CreateCategoryForm'
+import TopAppBar from '@/components/navigation/TopAppBar'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -22,8 +23,10 @@ export default async function CategoriesPage() {
   const hasCategories = categories && categories.length > 0
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-2xl mx-auto mt-8">
+    <>
+      <TopAppBar fallbackHref="/finance" />
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-2xl mx-auto mt-8">
         <div className="mb-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
             <Link href="/finance/budgets" className="hover:text-blue-600">
@@ -58,7 +61,8 @@ export default async function CategoriesPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

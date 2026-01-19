@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getCurrentWantsPeriod } from '@/lib/wants/periods';
 import { WantsBudgetForm } from './components/budget-form';
 import { WantsOverview } from './components/overview';
+import TopAppBar from '@/components/navigation/TopAppBar';
 
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000';
 
@@ -33,17 +34,20 @@ export default async function WantsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Wants Budget</h1>
-        <p className="text-muted-foreground mt-1">{period.label} (6-month period)</p>
-      </div>
+    <>
+      <TopAppBar fallbackHref="/finance" />
+      <div className="container mx-auto p-4 space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">Wants Budget</h1>
+          <p className="text-muted-foreground mt-1">{period.label} (6-month period)</p>
+        </div>
 
-      {!budget ? (
-        <WantsBudgetForm period={period} />
-      ) : (
-        <WantsOverview budget={budget} totalSpent={totalSpent} period={period} transactions={transactions} />
-      )}
-    </div>
+        {!budget ? (
+          <WantsBudgetForm period={period} />
+        ) : (
+          <WantsOverview budget={budget} totalSpent={totalSpent} period={period} transactions={transactions} />
+        )}
+      </div>
+    </>
   );
 }

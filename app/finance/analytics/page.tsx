@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { Tables } from '@/lib/database.types'
 import BudgetSelector from './BudgetSelector'
 import AnalyticsCharts from './AnalyticsCharts'
+import TopAppBar from '@/components/navigation/TopAppBar'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -46,8 +47,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   // Handle no budgets case
   if (!budgets || budgets.length === 0) {
     return (
-      <div className="min-h-screen bg-background p-4">
-        <div className="max-w-6xl mx-auto mt-8">
+      <>
+        <TopAppBar fallbackHref="/finance" />
+        <div className="min-h-screen bg-background p-4">
+          <div className="max-w-6xl mx-auto mt-8">
           <div className="mb-6">
             <Link
               href="/finance/budgets"
@@ -68,8 +71,9 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
               Create Budget
             </Link>
           </div>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -87,8 +91,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   // If budget not found, redirect to most recent
   if (!budget) {
     return (
-      <div className="min-h-screen bg-background p-4">
-        <div className="max-w-6xl mx-auto mt-8">
+      <>
+        <TopAppBar fallbackHref="/finance" />
+        <div className="min-h-screen bg-background p-4">
+          <div className="max-w-6xl mx-auto mt-8">
           <div className="bg-card rounded-lg shadow p-8 text-center">
             <p className="text-muted-foreground mb-4">Budget not found</p>
             <Link
@@ -98,8 +104,9 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
               Go to latest budget
             </Link>
           </div>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -190,8 +197,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   }))
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-6xl mx-auto mt-8">
+    <>
+      <TopAppBar fallbackHref="/finance" />
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-6xl mx-auto mt-8">
         <div className="mb-6">
           <Link
             href="/finance/budgets"
@@ -214,7 +223,8 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
           comparisonData={comparisonData}
           budgetTotal={budget.total_budget}
         />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

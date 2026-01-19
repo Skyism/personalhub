@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { Tables } from '@/lib/database.types'
 import BudgetList from './BudgetList'
 import { Card } from '@/components/ui/card'
+import TopAppBar from '@/components/navigation/TopAppBar'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -25,8 +26,10 @@ export default async function BudgetsPage() {
   const hasBudgets = budgets && budgets.length > 0
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-2xl mx-auto mt-8">
+    <>
+      <TopAppBar fallbackHref="/finance" />
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-2xl mx-auto mt-8">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Budgets</h1>
@@ -60,7 +63,8 @@ export default async function BudgetsPage() {
         ) : (
           <BudgetList budgets={budgets} />
         )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
