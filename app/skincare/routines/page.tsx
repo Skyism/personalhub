@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DAYS_OF_WEEK } from '@/lib/skincare-seed';
 import { getRoutines } from './actions';
+import RoutineEditor from './components/RoutineEditor';
 
 type RoutineStep = {
     id: string;
@@ -45,9 +46,17 @@ export default function RoutinesPage() {
             }
         }
         fetchRoutines();
-    }, []);
+    }, [selectedDay]);
 
     const selectedDayName = DAYS_OF_WEEK.find((d) => d.value === selectedDay)?.label || '';
+
+    // Extract steps for selected day
+    const morningSteps =
+        (routines.find((r) => r.day_of_week === selectedDay && r.time_of_day === 'morning')
+            ?.steps as RoutineStep[]) || [];
+    const nightSteps =
+        (routines.find((r) => r.day_of_week === selectedDay && r.time_of_day === 'night')
+            ?.steps as RoutineStep[]) || [];
 
     return (
         <div className="min-h-screen pb-20">
@@ -77,30 +86,25 @@ export default function RoutinesPage() {
                     <h1 className="text-2xl font-bold">{selectedDayName}'s Routine</h1>
                 </div>
 
-                {/* Morning Routine Placeholder */}
-                <Card className="p-6">
-                    <h2 className="text-xl font-semibold mb-4">Morning Routine</h2>
-                    {loading ? (
+                {/* Morning Routine Editor */}
+                {loading ? (
+                    <Card className="p-6">
                         <p className="text-sm text-muted-foreground">Loading...</p>
-                    ) : (
-                        <p className="text-sm text-muted-foreground">
-                            Routine editor coming soon (Plan 9.2-02)
-                        </p>
-                    )}
-                </Card>
+                    </Card>
+                ) : (
+                    <RoutineEditor dayOfWeek={selectedDay} timeOfDay="morning" initialSteps={morningSteps} />
+                )}
 
-                {/* Night Routine Placeholder */}
-                <Card className="p-6">
-                    <h2 className="text-xl font-semibold mb-4">Night Routine</h2>
-                    {loading ? (
+                {/* Night Routine Editor */}
+                {loading ? (
+                    <Card className="p-6">
                         <p className="text-sm text-muted-foreground">Loading...</p>
-                    ) : (
-                        <p className="text-sm text-muted-foreground">
-                            Routine editor coming soon (Plan 9.2-02)
-                        </p>
-                    )}
-                </Card>
+                    </Card>
+                ) : (
+                    <RoutineEditor dayOfWeek={selectedDay} timeOfDay="night" initialSteps={nightSteps} />
+                )}
             </div>
         </div>
     );
 }
+
