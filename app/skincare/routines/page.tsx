@@ -1,7 +1,5 @@
-'use client';
-
 import { useState, useEffect } from 'react';
-import { TopAppBar } from '@/app/finance/components/TopAppBar';
+import TopAppBar from '@/components/navigation/TopAppBar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DAYS_OF_WEEK } from '@/lib/skincare-seed';
@@ -53,7 +51,7 @@ export default function RoutinesPage() {
 
     return (
         <div className="min-h-screen pb-20">
-            <TopAppBar title="Edit Routines" backHref="/skincare" />
+            <TopAppBar title="Edit Routines" fallbackHref="/skincare" />
 
             <div className="container mx-auto px-4 py-6 space-y-6">
                 {/* Day Selector */}

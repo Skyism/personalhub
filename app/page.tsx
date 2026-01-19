@@ -10,10 +10,11 @@ const modules = [
     available: true,
   },
   {
+    href: '/skincare/routines',
     icon: Sparkles,
     title: 'Skincare',
-    description: 'Morning and night reminder system',
-    available: false,
+    description: 'Daily routine tracker',
+    available: true,
   },
   {
     icon: Activity,
