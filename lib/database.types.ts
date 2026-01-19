@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.1"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       budgets: {
@@ -152,6 +177,36 @@ export type Database = {
           message_sid?: string | null
           status?: string
           type?: string
+        }
+        Relationships: []
+      }
+      skincare_routines: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          id: number
+          steps: Json
+          time_of_day: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          id?: never
+          steps?: Json
+          time_of_day: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          id?: never
+          steps?: Json
+          time_of_day?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -459,6 +514,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
