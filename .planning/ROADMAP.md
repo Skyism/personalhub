@@ -156,11 +156,11 @@ Plans:
 **Goal**: Create database schema for storing daily routines (Monday-Sunday) with morning and night routine steps for each day
 **Depends on**: Phase 8.2 (Navigation complete)
 **Research**: Unlikely (established Supabase patterns from Finance module)
-**Status**: Not started
-**Plans**: TBD
+**Status**: Complete
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 9.1-01: TBD (run /gsd:plan-phase 9.1 to break down)
+- [x] 9.1-01: Skincare Routine Schema (skincare_routines table with JSONB steps, RLS policies, TypeScript types, sample data) - Completed 2026-01-19
 
 **Details:**
 Database schema to store:
