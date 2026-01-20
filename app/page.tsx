@@ -10,7 +10,7 @@ const modules = [
     available: true,
   },
   {
-    href: '/skincare/routines',
+    href: '/skincare',
     icon: Sparkles,
     title: 'Skincare',
     description: 'Daily routine tracker',
