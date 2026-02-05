@@ -36,8 +36,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('personalhub-theme') || 'dark';
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${plusJakartaSans.variable} ${jetbrainsMono.variable}`}
       >
         <ThemeProvider
           attribute="class"

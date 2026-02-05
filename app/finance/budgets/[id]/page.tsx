@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import CategoryAllocation from './CategoryAllocation'
 import TransactionForm from './TransactionForm'
 import TransactionItem from './TransactionItem'
+import { BudgetActions } from './BudgetActions'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -200,24 +201,8 @@ export default async function BudgetDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="flex gap-3 pt-4 border-t border-border">
-              {/* TODO: Implement edit functionality in future plan */}
-              <button
-                disabled
-                className="flex-1 bg-muted text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
-                title="Edit functionality coming soon"
-              >
-                Edit Budget
-              </button>
-              {/* TODO: Implement delete functionality in future plan */}
-              <button
-                disabled
-                className="flex-1 bg-muted text-muted-foreground px-4 py-2 rounded-lg cursor-not-allowed font-medium"
-                title="Delete functionality coming soon"
-              >
-                Delete Budget
-              </button>
-            </div>
+
+            <BudgetActions budget={budget} />
           </CardContent>
         </Card>
 
@@ -236,96 +221,91 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           <CardContent className="pt-6">
             <h2 className="text-2xl font-bold text-foreground mb-6">Spending Summary</h2>
 
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-2">
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {formatCurrency(totalSpent)} spent of {formatCurrency(budget.total_budget)} budget
+                  </p>
+                  <p className={`text-sm font-semibold ${statusColor === 'red' ? 'text-destructive' :
+                    statusColor === 'yellow' ? 'text-yellow-600' :
+                      'text-green-600'
+                    }`}>
+                    {totalRemaining >= 0
+                      ? `${formatCurrency(totalRemaining)} remaining`
+                      : `${formatCurrency(Math.abs(totalRemaining))} over budget`
+                    }
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className={`text-2xl font-bold ${statusColor === 'red' ? 'text-destructive' :
+                    statusColor === 'yellow' ? 'text-yellow-600' :
+                      'text-green-600'
+                    }`}>
+                    {spentPercentage.toFixed(0)}%
+                  </p>
+                </div>
+              </div>
+
+              <div className="w-full bg-muted rounded-full h-4 overflow-hidden">
+                <div
+                  className={`h-full transition-all ${statusColor === 'red' ? 'bg-destructive' :
+                    statusColor === 'yellow' ? 'bg-yellow-500' :
+                      'bg-primary'
+                    }`}
+                  style={{ width: `${Math.min(spentPercentage, 100)}%` }}
+                />
+              </div>
+            </div>
+
+            {categoryBreakdown.length > 0 && (
               <div>
-                <p className="text-sm text-muted-foreground">
-                  {formatCurrency(totalSpent)} spent of {formatCurrency(budget.total_budget)} budget
-                </p>
-                <p className={`text-sm font-semibold ${
-                  statusColor === 'red' ? 'text-destructive' :
-                  statusColor === 'yellow' ? 'text-yellow-600' :
-                  'text-green-600'
-                }`}>
-                  {totalRemaining >= 0
-                    ? `${formatCurrency(totalRemaining)} remaining`
-                    : `${formatCurrency(Math.abs(totalRemaining))} over budget`
-                  }
-                </p>
-              </div>
-              <div className="text-right">
-                <p className={`text-2xl font-bold ${
-                  statusColor === 'red' ? 'text-destructive' :
-                  statusColor === 'yellow' ? 'text-yellow-600' :
-                  'text-green-600'
-                }`}>
-                  {spentPercentage.toFixed(0)}%
-                </p>
-              </div>
-            </div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Category Breakdown</h3>
+                <div className="space-y-4">
+                  {categoryBreakdown.map(category => {
+                    const categoryStatusColor = getStatusColor(category.percentage)
 
-            <div className="w-full bg-muted rounded-full h-4 overflow-hidden">
-              <div
-                className={`h-full transition-all ${
-                  statusColor === 'red' ? 'bg-destructive' :
-                  statusColor === 'yellow' ? 'bg-yellow-500' :
-                  'bg-primary'
-                }`}
-                style={{ width: `${Math.min(spentPercentage, 100)}%` }}
-              />
-            </div>
-          </div>
-
-          {categoryBreakdown.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-4">Category Breakdown</h3>
-              <div className="space-y-4">
-                {categoryBreakdown.map(category => {
-                  const categoryStatusColor = getStatusColor(category.percentage)
-
-                  return (
-                    <div key={category.id} className="border border-border rounded-lg p-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="px-2 py-1 rounded text-xs font-medium"
-                            style={{
-                              backgroundColor: category.color ? `${category.color}20` : '#E5E7EB',
-                              color: category.color || '#6B7280'
-                            }}
-                          >
-                            {category.name}
-                          </span>
+                    return (
+                      <div key={category.id} className="border border-border rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="px-2 py-1 rounded text-xs font-medium"
+                              style={{
+                                backgroundColor: category.color ? `${category.color}20` : '#E5E7EB',
+                                color: category.color || '#6B7280'
+                              }}
+                            >
+                              {category.name}
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-semibold text-foreground">
+                              {formatCurrency(category.spent)} / {formatCurrency(category.allocated)}
+                            </p>
+                            <p className={`text-xs font-semibold ${categoryStatusColor === 'red' ? 'text-destructive' :
+                              categoryStatusColor === 'yellow' ? 'text-yellow-600' :
+                                'text-green-600'
+                              }`}>
+                              {category.percentage.toFixed(0)}%
+                            </p>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm font-semibold text-foreground">
-                            {formatCurrency(category.spent)} / {formatCurrency(category.allocated)}
-                          </p>
-                          <p className={`text-xs font-semibold ${
-                            categoryStatusColor === 'red' ? 'text-destructive' :
-                            categoryStatusColor === 'yellow' ? 'text-yellow-600' :
-                            'text-green-600'
-                          }`}>
-                            {category.percentage.toFixed(0)}%
-                          </p>
+                        <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                          <div
+                            className={`h-full transition-all ${categoryStatusColor === 'red' ? 'bg-destructive' :
+                              categoryStatusColor === 'yellow' ? 'bg-yellow-500' :
+                                'bg-accent'
+                              }`}
+                            style={{ width: `${Math.min(category.percentage, 100)}%` }}
+                          />
                         </div>
                       </div>
-                      <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-                        <div
-                          className={`h-full transition-all ${
-                            categoryStatusColor === 'red' ? 'bg-destructive' :
-                            categoryStatusColor === 'yellow' ? 'bg-yellow-500' :
-                            'bg-accent'
-                          }`}
-                          style={{ width: `${Math.min(category.percentage, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  )
-                })}
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           </CardContent>
         </Card>
 
@@ -333,35 +313,35 @@ export default async function BudgetDetailPage({ params }: PageProps) {
           <CardContent className="pt-6">
             <h2 className="text-2xl font-bold text-foreground mb-6">Transactions</h2>
 
-          <TransactionForm budgetId={budgetId} categories={categories || []} />
+            <TransactionForm budgetId={budgetId} categories={categories || []} />
 
-          {!transactions || transactions.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">
-              No transactions yet. Add your first expense below.
-            </p>
-          ) : (
-            <div className="space-y-6">
-              {Object.entries(groupTransactionsByDate(transactions)).map(([group, groupTransactions]) => {
-                if (groupTransactions.length === 0) return null
+            {!transactions || transactions.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">
+                No transactions yet. Add your first expense below.
+              </p>
+            ) : (
+              <div className="space-y-6">
+                {Object.entries(groupTransactionsByDate(transactions)).map(([group, groupTransactions]) => {
+                  if (groupTransactions.length === 0) return null
 
-                return (
-                  <div key={group}>
-                    <h3 className="text-sm font-semibold text-card-foreground mb-3">{group}</h3>
-                    <div className="space-y-3">
-                      {groupTransactions.map(transaction => (
-                        <TransactionItem
-                          key={transaction.id}
-                          transaction={transaction}
-                          budgetId={budgetId}
-                          categories={categories || []}
-                        />
-                      ))}
+                  return (
+                    <div key={group}>
+                      <h3 className="text-sm font-semibold text-card-foreground mb-3">{group}</h3>
+                      <div className="space-y-3">
+                        {groupTransactions.map(transaction => (
+                          <TransactionItem
+                            key={transaction.id}
+                            transaction={transaction}
+                            budgetId={budgetId}
+                            categories={categories || []}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
+                  )
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

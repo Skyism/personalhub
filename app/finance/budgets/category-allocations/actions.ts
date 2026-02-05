@@ -90,3 +90,63 @@ export async function removeAllocation(budgetId: number, categoryId: number) {
   revalidatePath(`/finance/budgets/${budgetId}`)
   return { success: true }
 }
+
+export async function updateAllocation(
+  budgetId: number,
+  categoryId: number,
+  newAmount: number
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient()
+
+  // Validate newAmount > 0
+  if (newAmount <= 0) {
+    return { success: false, error: 'Please enter a valid amount' }
+  }
+
+  // Get budget total
+  const { data: budget, error: budgetError } = await supabase
+    .from('budgets')
+    .select('total_budget')
+    .eq('id', budgetId)
+    .eq('user_id', TEMP_USER_ID)
+    .single()
+
+  if (budgetError || !budget) {
+    return { success: false, error: 'Budget not found' }
+  }
+
+  // Get existing allocations (excluding current category)
+  const { data: existingAllocations } = await supabase
+    .from('category_allocations')
+    .select('allocated_amount')
+    .eq('budget_id', budgetId)
+    .eq('user_id', TEMP_USER_ID)
+    .neq('category_id', categoryId)
+
+  const totalOtherAllocations = (existingAllocations || [])
+    .reduce((sum, a) => sum + a.allocated_amount, 0)
+
+  // Validate total doesn't exceed budget
+  if (totalOtherAllocations + newAmount > budget.total_budget) {
+    return {
+      success: false,
+      error: 'Total allocations would exceed budget'
+    }
+  }
+
+  // Update allocation
+  const { error } = await supabase
+    .from('category_allocations')
+    .update({ allocated_amount: newAmount })
+    .eq('budget_id', budgetId)
+    .eq('category_id', categoryId)
+    .eq('user_id', TEMP_USER_ID)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath(`/finance/budgets/${budgetId}`)
+  return { success: true }
+}
+

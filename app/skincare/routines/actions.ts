@@ -52,7 +52,16 @@ export async function upsertRoutine(
         }
     );
 
-    if (error) throw new Error(`Failed to save routine: ${error.message}`);
+    if (error) {
+        console.error('Failed to save routine:', {
+            error,
+            dayOfWeek,
+            timeOfDay,
+            stepsCount: steps.length,
+            message: error.message,
+        });
+        throw new Error(`Failed to save routine: ${error.message}`);
+    }
 
     revalidatePath('/skincare/routines');
     return { success: true };

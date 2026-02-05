@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { setAllocation, removeAllocation } from '../category-allocations/actions'
+import { setAllocation, removeAllocation, updateAllocation } from '../category-allocations/actions'
 import type { Tables } from '@/lib/database.types'
 
 type Category = Tables<'categories'>
@@ -35,6 +35,9 @@ export default function CategoryAllocation({
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editAmount, setEditAmount] = useState('')
+  const [editError, setEditError] = useState('')
 
   const totalAllocated = allocations.reduce((sum, a) => sum + a.allocated_amount, 0)
   const availableAmount = totalBudget - totalAllocated
@@ -71,6 +74,24 @@ export default function CategoryAllocation({
     const result = await removeAllocation(budgetId, categoryId)
     if (!result.success) {
       alert(result.error || 'Failed to remove allocation')
+    }
+  }
+
+  const handleSaveEdit = async (categoryId: number) => {
+    setEditError('')
+
+    const amountNum = parseFloat(editAmount)
+    if (isNaN(amountNum) || amountNum <= 0) {
+      setEditError('Please enter a valid amount')
+      return
+    }
+
+    const result = await updateAllocation(budgetId, categoryId, amountNum)
+    if (result.success) {
+      setEditingId(null)
+      setEditAmount('')
+    } else {
+      setEditError(result.error || 'Failed to update allocation')
     }
   }
 
@@ -220,6 +241,8 @@ export default function CategoryAllocation({
             const category = categories.find((c) => c.id === allocation.category_id)
             if (!category) return null
 
+            const isEditing = editingId === allocation.id
+
             return (
               <div
                 key={allocation.id}
@@ -232,20 +255,63 @@ export default function CategoryAllocation({
                   />
                   <span className="font-medium text-foreground">{category.name}</span>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-lg font-semibold text-foreground">
-                    {formatCurrency(allocation.allocated_amount)}
-                  </span>
-                  <button
-                    onClick={() => handleRemove(allocation.category_id)}
-                    className="text-destructive hover:text-red-700 font-medium text-sm"
-                  >
-                    Remove
-                  </button>
-                </div>
+
+                {isEditing ? (
+                  // EDIT MODE
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      value={editAmount}
+                      onChange={(e) => setEditAmount(e.target.value)}
+                      className="w-32 px-2 py-1 border border-border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-foreground"
+                    />
+                    <button
+                      onClick={() => handleSaveEdit(allocation.category_id)}
+                      className="text-primary hover:text-primary/80 font-medium text-sm"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingId(null)
+                        setEditAmount('')
+                        setEditError('')
+                      }}
+                      className="text-muted-foreground hover:text-foreground font-medium text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  // DISPLAY MODE
+                  <div className="flex items-center gap-4">
+                    <span className="text-lg font-semibold text-foreground">
+                      {formatCurrency(allocation.allocated_amount)}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setEditingId(allocation.id)
+                        setEditAmount(allocation.allocated_amount.toString())
+                        setEditError('')
+                      }}
+                      className="text-primary hover:text-primary/80 font-medium text-sm"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleRemove(allocation.category_id)}
+                      className="text-destructive hover:text-red-700 font-medium text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
               </div>
             )
           })}
+          {editError && <p className="text-destructive text-sm mt-2">{editError}</p>}
         </div>
       )}
     </div>

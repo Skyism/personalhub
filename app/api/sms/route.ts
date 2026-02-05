@@ -138,24 +138,56 @@ export async function POST(request: NextRequest) {
   // Regular transaction flow continues below
   const { amount, note } = parseResult
 
-  // Get most recent budget for this user
-  const { data: budget, error: budgetError } = await supabase
+  // Get current month in YYYY-MM format
+  const currentDate = new Date()
+  const currentMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`
+
+  // Try to get budget for current month
+  let { data: budget, error: budgetError } = await supabase
     .from('budgets')
     .select('id')
     .eq('user_id', TEMP_USER_ID)
-    .order('month', { ascending: false })
-    .limit(1)
+    .eq('month', currentMonth)  // Match exact month
     .maybeSingle()
 
-  if (budgetError || !budget) {
-    console.error('No budget found for user:', TEMP_USER_ID)
-    // No budget exists - send error message back to user
-    const appUrl = process.env.NEXT_PUBLIC_URL || 'your app'
-    return new NextResponse(
-      `<?xml version="1.0" encoding="UTF-8"?><Response><Message>No budget found. Create a budget first at ${appUrl}</Message></Response>`,
-      {
-        headers: { 'Content-Type': 'text/xml' },
-      }
+  // If no budget exists for current month, create one
+  if (!budget && !budgetError) {
+    const { data: newBudget, error: createError } = await supabase
+      .from('budgets')
+      .insert({
+        user_id: TEMP_USER_ID,
+        month: currentMonth,
+        total_budget: 0,  // Default to $0, user can update later
+      })
+      .select('id')
+      .single()
+
+    if (createError) {
+      console.error('Error creating budget:', createError)
+      return new Response(
+        `<?xml version="1.0" encoding="UTF-8"?><Response><Message>Error creating budget for ${currentMonth}. Please try again.</Message></Response>`,
+        { headers: { 'Content-Type': 'text/xml' } }
+      )
+    }
+
+    budget = newBudget
+    budgetError = null
+  }
+
+  if (budgetError) {
+    console.error('Error fetching/creating budget:', budgetError)
+    return new Response(
+      `<?xml version="1.0" encoding="UTF-8"?><Response><Message>Error accessing budget. Please try again.</Message></Response>`,
+      { headers: { 'Content-Type': 'text/xml' } }
+    )
+  }
+
+  // At this point, budget should always exist (either found or created)
+  if (!budget) {
+    console.error('Budget is null after fetch/create attempt')
+    return new Response(
+      `<?xml version="1.0" encoding="UTF-8"?><Response><Message>Unable to access budget. Please try again.</Message></Response>`,
+      { headers: { 'Content-Type': 'text/xml' } }
     )
   }
 

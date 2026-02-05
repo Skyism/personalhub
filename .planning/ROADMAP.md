@@ -175,11 +175,12 @@ Database schema to store:
 **Depends on**: Phase 9.1
 **Research**: Skipped (CRUD UI with existing Finance patterns)
 **Status**: Complete
-**Plans**: 2/2 complete
+**Plans**: 3/3 complete
 
 Plans:
 - [x] 9.2-01: Routine Management Foundation (Server Actions, day selector, home navigation) - Completed 2026-01-19
 - [x] 9.2-02: Routine Step Editor (add, edit, delete, reorder steps with save) - Completed 2026-01-19
+- [x] 9.2-03: Fix Routine Save State Synchronization (sync component state when switching days) - Completed 2026-01-20
 
 **Details:**
 Settings/edit page where users can:
@@ -189,7 +190,7 @@ Settings/edit page where users can:
 - Save changes to database
 - Copy routines between days (optional convenience feature)
 
-**Result:** Phase 9.2 complete. All plans executed successfully. Full routine management UI shipped with Server Actions (getRoutines, upsertRoutine, deleteRoutine), day selector with 7-day navigation, RoutineEditor component with add/edit/delete/reorder/save operations, and home page Skincare module navigation. Manual verification confirmed all CRUD operations work correctly and data persists across page refreshes and day switching.
+**Result:** Phase 9.2 complete. All plans executed successfully. Full routine management UI shipped with Server Actions, day selector, CRUD operations, and state synchronization fix. Plans 9.2-01 and 9.2-02 delivered initial implementation. Plan 9.2-03 fixed critical state synchronization bug where component didn't update when switching days, causing save failures and data loss. Comprehensive browser testing confirmed all core operations (add, save, day-switching, delete) work correctly and persist to database.
 
 #### Phase 9.3: Routine Display View
 
@@ -238,11 +239,12 @@ Plans:
 **Goal**: Build UI for creating monthly budgets with total and per-category allocations
 **Depends on**: Phase 2
 **Research**: Unlikely (internal UI building on Phase 2 patterns)
-**Plans**: 2/2 complete
+**Plans**: 3/3 complete
 
 Plans:
 - [x] **03-01-PLAN.md** - Budget Overview & Creation (list, creation form, detail views) - Completed 2026-01-12
 - [x] **03-02-PLAN.md** - Category Management (category CRUD and budget allocations) - Completed 2026-01-12
+- [x] **03-03-PLAN.md** - Budget Allocation Editing (inline edit for allocation amounts) - Completed 2026-01-20
 
 ### Phase 4: Transaction System
 **Goal**: Implement transaction list display and manual entry form with category assignment

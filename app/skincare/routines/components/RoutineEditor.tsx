@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,14 @@ export default function RoutineEditor({ dayOfWeek, timeOfDay, initialSteps }: Ro
     const [editText, setEditText] = useState('');
     const [saving, setSaving] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
+
+    // Sync local state when props change (e.g., user switches days)
+    useEffect(() => {
+        setSteps(initialSteps);
+        setHasChanges(false);
+        setEditingId(null);
+        setEditText('');
+    }, [initialSteps, dayOfWeek, timeOfDay]);
 
     const title = timeOfDay === 'morning' ? 'Morning Routine' : 'Night Routine';
 

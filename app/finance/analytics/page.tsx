@@ -51,26 +51,26 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
         <TopAppBar fallbackHref="/finance" />
         <div className="min-h-screen bg-background p-4">
           <div className="max-w-6xl mx-auto mt-8">
-          <div className="mb-6">
-            <Link
-              href="/finance/budgets"
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              &larr; Back to Budgets
-            </Link>
-          </div>
-          <div className="bg-card rounded-lg shadow p-12 text-center">
-            <h1 className="text-2xl font-bold text-foreground mb-4">No Budgets Yet</h1>
-            <p className="text-muted-foreground mb-6">
-              Create your first budget to see analytics
-            </p>
-            <Link
-              href="/finance/budgets/new"
-              className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-            >
-              Create Budget
-            </Link>
-          </div>
+            <div className="mb-6">
+              <Link
+                href="/finance/budgets"
+                className="text-blue-600 hover:text-blue-700 font-medium"
+              >
+                &larr; Back to Budgets
+              </Link>
+            </div>
+            <div className="bg-card rounded-lg shadow p-12 text-center">
+              <h1 className="text-2xl font-bold text-foreground mb-4">No Budgets Yet</h1>
+              <p className="text-muted-foreground mb-6">
+                Create your first budget to see analytics
+              </p>
+              <Link
+                href="/finance/budgets/new"
+                className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                Create Budget
+              </Link>
+            </div>
           </div>
         </div>
       </>
@@ -95,15 +95,15 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
         <TopAppBar fallbackHref="/finance" />
         <div className="min-h-screen bg-background p-4">
           <div className="max-w-6xl mx-auto mt-8">
-          <div className="bg-card rounded-lg shadow p-8 text-center">
-            <p className="text-muted-foreground mb-4">Budget not found</p>
-            <Link
-              href={`/finance/analytics?budget_id=${budgets[0].id}`}
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Go to latest budget
-            </Link>
-          </div>
+            <div className="bg-card rounded-lg shadow p-8 text-center">
+              <p className="text-muted-foreground mb-4">Budget not found</p>
+              <Link
+                href={`/finance/analytics?budget_id=${budgets[0].id}`}
+                className="text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Go to latest budget
+              </Link>
+            </div>
           </div>
         </div>
       </>
@@ -178,14 +178,20 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   }, {} as Record<string, number>) || {}
 
   const dailyData: DailySpending[] = Object.entries(dailySpendingMap)
-    .map(([date, amount]) => ({
-      date,
-      amount: amount as number,
-      formattedDate: new Date(date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      })
-    }))
+    .map(([date, amount]) => {
+      // Parse YYYY-MM-DD in local timezone to avoid UTC midnight issues
+      const [year, month, day] = date.split('-').map(Number)
+      const localDate = new Date(year, month - 1, day)
+
+      return {
+        date,
+        amount: amount as number,
+        formattedDate: localDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric'
+        })
+      }
+    })
     .sort((a, b) => a.date.localeCompare(b.date))
 
   // 3. Budget comparison data for bar chart
@@ -201,28 +207,28 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       <TopAppBar fallbackHref="/finance" />
       <div className="min-h-screen bg-background p-4">
         <div className="max-w-6xl mx-auto mt-8">
-        <div className="mb-6">
-          <Link
-            href="/finance/budgets"
-            className="text-blue-600 hover:text-blue-700 font-medium"
-          >
-            &larr; Back to Budgets
-          </Link>
-        </div>
+          <div className="mb-6">
+            <Link
+              href="/finance/budgets"
+              className="text-blue-600 hover:text-blue-700 font-medium"
+            >
+              &larr; Back to Budgets
+            </Link>
+          </div>
 
-        {/* Header with budget selector */}
-        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
-          <BudgetSelector budgets={budgets} selectedBudgetId={budgetId} />
-        </div>
+          {/* Header with budget selector */}
+          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
+            <BudgetSelector budgets={budgets} selectedBudgetId={budgetId} />
+          </div>
 
-        {/* Charts rendered in Client Component with dynamic imports */}
-        <AnalyticsCharts
-          categoryData={categoryData}
-          dailyData={dailyData}
-          comparisonData={comparisonData}
-          budgetTotal={budget.total_budget}
-        />
+          {/* Charts rendered in Client Component with dynamic imports */}
+          <AnalyticsCharts
+            categoryData={categoryData}
+            dailyData={dailyData}
+            comparisonData={comparisonData}
+            budgetTotal={budget.total_budget}
+          />
         </div>
       </div>
     </>
