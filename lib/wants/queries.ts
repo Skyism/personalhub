@@ -78,3 +78,74 @@ export async function createWantsTransaction(params: {
   if (error) throw error;
   return data;
 }
+
+/**
+ * Finds the currently active trip for the user.
+ * Only one trip can be active at a time (enforced by partial unique index).
+ *
+ * @returns Object with trip data (or null)
+ *
+ * @example
+ * const { trip } = await findActiveTrip();
+ * if (!trip) {
+ *   // No active trip - show error to user
+ * }
+ */
+export async function findActiveTrip() {
+  const supabase = await createClient();
+
+  const { data: trip } = await supabase
+    .from('wants_trips')
+    .select('id, name, destination, wants_budget_id, budget_amount')
+    .eq('user_id', TEMP_USER_ID)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  return { trip };
+}
+
+/**
+ * Creates a trip transaction in the database via SMS.
+ *
+ * @param params - Transaction parameters including trip ID, budget ID, amount, note, and Twilio metadata
+ * @returns Created transaction data with ID
+ * @throws Error if insert fails
+ *
+ * @example
+ * await createTripTransaction({
+ *   tripId: 1,
+ *   wantsBudgetId: 1,
+ *   amount: 25.50,
+ *   note: 'dinner',
+ *   twilioMessageId: 'SM1234567890',
+ *   twilioFrom: '+15555551234',
+ * });
+ */
+export async function createTripTransaction(params: {
+  tripId: number;
+  wantsBudgetId: number;
+  amount: number;
+  note: string | null;
+  twilioMessageId: string;
+  twilioFrom: string;
+}) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('wants_trip_transactions')
+    .insert({
+      user_id: TEMP_USER_ID,
+      trip_id: params.tripId,
+      wants_budget_id: params.wantsBudgetId,
+      amount: params.amount,
+      note: params.note,
+      source: 'sms',
+      twilio_message_id: params.twilioMessageId,
+      transaction_date: new Date().toISOString().split('T')[0],
+    })
+    .select('id')
+    .single();
+
+  if (error) throw error;
+  return data;
+}

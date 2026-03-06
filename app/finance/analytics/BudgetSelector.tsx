@@ -11,7 +11,8 @@ type BudgetSelectorProps = {
 }
 
 function formatMonth(monthString: string): string {
-  const date = new Date(monthString + '-01')
+  const [year, month] = monthString.split('-')
+  const date = new Date(parseInt(year), parseInt(month) - 1, 1)
   return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 }
 

@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache'
 import twilio from 'twilio'
 import { parseSMS } from '@/lib/twilio/parser'
 import { createClient } from '@/lib/supabase/server'
-import { findOrCreateCurrentWantsBudget, createWantsTransaction } from '@/lib/wants/queries'
+import { findOrCreateCurrentWantsBudget, createWantsTransaction, findActiveTrip, createTripTransaction } from '@/lib/wants/queries'
 
 // TODO: Replace with actual user_id from Supabase auth once implemented
 const TEMP_USER_ID = '00000000-0000-0000-0000-000000000000'
@@ -72,7 +72,64 @@ export async function POST(request: NextRequest) {
     // Could not parse amount - send error message back to user
     console.error('Failed to parse amount from SMS:', smsBody)
     return new NextResponse(
-      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee at starbucks" or "wants 25 coffee"</Message></Response>',
+      '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Could not parse amount. Format: "$25 coffee", "wants 25 coffee", or "trip 25 dinner"</Message></Response>',
+      {
+        headers: { 'Content-Type': 'text/xml' },
+      }
+    )
+  }
+
+  // Handle trip transactions
+  if (parseResult.type === 'trip') {
+    const { trip } = await findActiveTrip()
+
+    if (!trip) {
+      console.error('No active trip found')
+      const twiml = `<?xml version="1.0" encoding="UTF-8"?><Response><Message>No active trip. Create and activate one in the app first.</Message></Response>`
+      return new NextResponse(twiml, {
+        status: 200,
+        headers: { 'Content-Type': 'text/xml' }
+      })
+    }
+
+    // Check idempotency for wants_trip_transactions
+    const { data: existingTrip } = await supabase
+      .from('wants_trip_transactions')
+      .select('id')
+      .eq('twilio_message_id', MessageSid)
+      .maybeSingle()
+
+    if (existingTrip) {
+      console.log('Duplicate trip SMS detected:', MessageSid)
+      return new NextResponse(
+        '<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
+        {
+          status: 200,
+          headers: { 'Content-Type': 'text/xml' }
+        }
+      )
+    }
+
+    // Create trip transaction
+    await createTripTransaction({
+      tripId: trip.id,
+      wantsBudgetId: trip.wants_budget_id,
+      amount: parseResult.amount,
+      note: parseResult.note || null,
+      twilioMessageId: MessageSid,
+      twilioFrom: From,
+    })
+
+    console.log('Trip transaction created via SMS:', {
+      MessageSid,
+      tripId: trip.id,
+      amount: parseResult.amount,
+      note: parseResult.note,
+    })
+
+    // Return empty TwiML response (silent success)
+    return new NextResponse(
+      '<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
       {
         headers: { 'Content-Type': 'text/xml' },
       }

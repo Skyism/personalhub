@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.1"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       budgets: {
@@ -380,6 +355,113 @@ export type Database = {
           },
         ]
       }
+      wants_trip_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: number
+          note: string | null
+          source: string
+          transaction_date: string | null
+          trip_id: number
+          twilio_message_id: string | null
+          updated_at: string | null
+          user_id: string
+          wants_budget_id: number
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: never
+          note?: string | null
+          source?: string
+          transaction_date?: string | null
+          trip_id: number
+          twilio_message_id?: string | null
+          updated_at?: string | null
+          user_id: string
+          wants_budget_id: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: never
+          note?: string | null
+          source?: string
+          transaction_date?: string | null
+          trip_id?: number
+          twilio_message_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+          wants_budget_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wants_trip_transactions_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "wants_trips"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wants_trip_transactions_wants_budget_id_fkey"
+            columns: ["wants_budget_id"]
+            isOneToOne: false
+            referencedRelation: "wants_budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wants_trips: {
+        Row: {
+          budget_amount: number
+          created_at: string | null
+          destination: string | null
+          end_date: string
+          id: number
+          name: string
+          start_date: string
+          status: string
+          updated_at: string | null
+          user_id: string
+          wants_budget_id: number
+        }
+        Insert: {
+          budget_amount: number
+          created_at?: string | null
+          destination?: string | null
+          end_date: string
+          id?: never
+          name: string
+          start_date: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+          wants_budget_id: number
+        }
+        Update: {
+          budget_amount?: number
+          created_at?: string | null
+          destination?: string | null
+          end_date?: string
+          id?: never
+          name?: string
+          start_date?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+          wants_budget_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wants_trips_wants_budget_id_fkey"
+            columns: ["wants_budget_id"]
+            isOneToOne: false
+            referencedRelation: "wants_budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -514,9 +596,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },

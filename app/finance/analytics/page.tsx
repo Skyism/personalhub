@@ -138,11 +138,12 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
     .eq('user_id', TEMP_USER_ID)
     .order('transaction_date', { ascending: true })
 
-  // Calculate per-category spending
+  // Calculate per-category spending from ALL transactions
   const categorySpending = transactions?.reduce((acc, t) => {
     const categoryId = t.category_id
     if (categoryId !== null) {
-      acc[categoryId] = (acc[categoryId] || 0) + t.amount
+      const amount = typeof t.amount === 'string' ? parseFloat(t.amount) : t.amount
+      acc[categoryId] = (acc[categoryId] || 0) + amount
     }
     return acc
   }, {} as Record<number, number>) || {}
@@ -151,29 +152,45 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const categoryBreakdown = allocations?.map(allocation => {
     const category = categories?.find(c => c.id === allocation.category_id)
     const spent = categorySpending[allocation.category_id] || 0
+    const allocated = typeof allocation.allocated_amount === 'string' 
+      ? parseFloat(allocation.allocated_amount) 
+      : allocation.allocated_amount
 
     return {
       id: allocation.category_id,
       name: category?.name || 'Unknown',
       color: category?.color || null,
-      allocated: allocation.allocated_amount,
+      allocated,
       spent
     }
   }) || []
 
-  // 1. Category spending data for pie chart
-  const categoryData: CategoryData[] = categoryBreakdown
-    .filter(c => c.spent > 0)
-    .map(c => ({
-      name: c.name,
-      value: c.spent,
-      color: c.color
-    }))
+  // 1. Category spending data for pie chart - include ALL categories with spending
+  // This includes categories that have transactions but may not have allocations
+  const categoryEntries = Object.entries(categorySpending) as [string, number][]
+  const categoryData: CategoryData[] = categoryEntries
+    .filter(([_, spent]) => spent > 0)
+    .map(([categoryIdStr, spent]) => {
+      const categoryId = parseInt(categoryIdStr, 10)
+      const category = categories?.find(c => c.id === categoryId)
+      // Also check if category info came from the transaction join (Supabase returns object, not array)
+      const transactionWithCategory = transactions?.find(t => t.category_id === categoryId)
+      const categoryFromTransaction = transactionWithCategory?.categories as { name?: string; color?: string } | null
+      return {
+        name: category?.name || categoryFromTransaction?.name || `Category ${categoryId}`,
+        value: spent,
+        color: category?.color || categoryFromTransaction?.color || null
+      }
+    })
 
   // 2. Daily spending data for line chart
   const dailySpendingMap = transactions?.reduce((acc, t) => {
-    const date = t.transaction_date
-    acc[date] = (acc[date] || 0) + t.amount
+    // Extract date part from timestamp (YYYY-MM-DD)
+    const dateStr = typeof t.transaction_date === 'string' 
+      ? t.transaction_date.split('T')[0] 
+      : new Date(t.transaction_date).toISOString().split('T')[0]
+    const amount = typeof t.amount === 'string' ? parseFloat(t.amount) : t.amount
+    acc[dateStr] = (acc[dateStr] || 0) + amount
     return acc
   }, {} as Record<string, number>) || {}
 
@@ -195,12 +212,37 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
     .sort((a, b) => a.date.localeCompare(b.date))
 
   // 3. Budget comparison data for bar chart
-  const comparisonData: CategoryComparison[] = categoryBreakdown.map(c => ({
-    category: c.name,
-    budgeted: c.allocated,
-    spent: c.spent,
-    color: c.color
-  }))
+  // Include all allocations, and also categories with spending but no allocations
+  const allocationMap = new Map(
+    categoryBreakdown.map(c => [c.id, c])
+  )
+  
+  // Get all categories that have spending but no allocation
+  const categoriesWithSpendingOnly = categoryEntries
+    .filter(([categoryIdStr, spent]) => {
+      const categoryId = parseInt(categoryIdStr)
+      return spent > 0 && !allocationMap.has(categoryId)
+    })
+    .map(([categoryIdStr, spent]) => {
+      const categoryId = parseInt(categoryIdStr)
+      const category = categories?.find(c => c.id === categoryId)
+      return {
+        category: category?.name || 'Unknown',
+        budgeted: 0,
+        spent,
+        color: category?.color || null
+      }
+    })
+
+  const comparisonData: CategoryComparison[] = [
+    ...categoryBreakdown.map(c => ({
+      category: c.name,
+      budgeted: c.allocated,
+      spent: c.spent,
+      color: c.color
+    })),
+    ...categoriesWithSpendingOnly
+  ]
 
   return (
     <>
@@ -218,7 +260,15 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
           {/* Header with budget selector */}
           <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
+              <Link
+                href="/finance/analytics/yearly"
+                className="inline-flex items-center gap-2 rounded-lg border border-primary bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/20 transition-colors"
+              >
+                Yearly analytics
+              </Link>
+            </div>
             <BudgetSelector budgets={budgets} selectedBudgetId={budgetId} />
           </div>
 
@@ -227,7 +277,9 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
             categoryData={categoryData}
             dailyData={dailyData}
             comparisonData={comparisonData}
-            budgetTotal={budget.total_budget}
+            budgetTotal={typeof budget.total_budget === 'string' 
+              ? parseFloat(budget.total_budget) 
+              : budget.total_budget}
           />
         </div>
       </div>

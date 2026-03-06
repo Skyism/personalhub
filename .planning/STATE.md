@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-01-14)
 
 **Core value:** The ability to text an expense and instantly see it reflected in the dashboard - removing all friction from expense tracking.
-**Current focus:** Phase 8.1 Semi-Annual Wants Budget (urgent insertion)
+**Current focus:** Phase 8.3 Trip Budget Tracking (next in queue)
 
 ## Current Position
 
 Milestone: v1.1 Skincare Routine Tracker (Phase 9.2 complete)
-Phase: 9.2 of 13 (Routine Management UI)
-Plan: 2 of 2 in current phase
-Status: Complete
-Last activity: 2026-01-19 — Completed 9.2-02-PLAN.md (Phase 9.2 complete)
+Phase: 6.1 complete; next: 8.3 (Trip Budget Tracking)
+Plan: 3/3 complete for 6.1
+Status: Phase 6.1 complete
+Last activity: 2026-03-06 — Phase 6.1 Yearly Spending Analytics executed (3 plans)
 
-Progress: ████████████████████░░░░░░░░░ 63% (33/52 plans complete)
+Progress: █████████████████████░░░░░░░░ 65% (36/55 plans complete)
 
 ## Performance Metrics
 
@@ -69,6 +69,7 @@ All decisions logged in PROJECT.md Key Decisions table. Key v1.0 decisions:
 - Milestone v1.1 created: Skincare Reminders (SMS notifications), 5 phases (Phase 9-13)
 - Phase 8.1 inserted after Phase 8: Semi-Annual Wants Budget (URGENT) - Finance module enhancement for 6-month budget periods outside monthly tracking
 - Phase 8.2 inserted after Phase 8.1: Hierarchical Navigation System (URGENT) - Complete navigation overhaul with breadcrumbs, top app bar, desktop nav, and home page module links to fix critical UX gaps
+- Phase 8.3 inserted after Phase 8.2: Trip Budget Tracking (URGENT) - Trip-scoped budget tracking under wants with dual-deduction totals, SMS support, and full CRUD
 
 ### Deferred Issues
 
@@ -82,7 +83,7 @@ None (cleared for v1.1 start)
 
 ## Session Continuity
 
-Last session: 2026-01-19T03:55:22Z
-Stopped at: Completed 9.2-02-PLAN.md (Phase 9.2 complete)
+Last session: 2026-03-06
+Stopped at: Created Phase 8.3 plan files (Trip Budget Tracking)
 Resume file: None
-Next action: Continue v1.1 Skincare Routine Tracker milestone (Phase 9.3: Routine Display View planning)
+Next action: Execute Phase 8.3-01 (Trip Budget Schema) or continue with 9.3 (Routine Display)

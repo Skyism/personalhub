@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Plane } from 'lucide-react';
 import { WantsBudgetForm } from './budget-form';
 import { TransactionList } from './transaction-list';
 import { TransactionForm } from './transaction-form';
@@ -26,11 +28,14 @@ interface WantsOverviewProps {
     period_end: string;
   };
   totalSpent: number;
+  wantsSpent?: number;
+  tripSpent?: number;
+  activeTrip?: { id: number; name: string; destination: string | null } | null;
   period: WantsPeriod;
   transactions: WantsTransaction[];
 }
 
-export function WantsOverview({ budget, totalSpent, period, transactions }: WantsOverviewProps) {
+export function WantsOverview({ budget, totalSpent, wantsSpent, tripSpent, activeTrip, period, transactions }: WantsOverviewProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingTransaction, setIsAddingTransaction] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<WantsTransaction | null>(null);
@@ -130,8 +135,48 @@ export function WantsOverview({ budget, totalSpent, period, transactions }: Want
               </p>
             </div>
           </div>
+
+          {/* Spending Breakdown (when trip spending exists) */}
+          {(tripSpent !== undefined && tripSpent > 0) && (
+            <div className="border-t pt-4 space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">Breakdown</p>
+              <div className="flex items-center justify-between text-sm">
+                <span>General wants</span>
+                <span className="font-mono">${(wantsSpent ?? 0).toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span>Trips</span>
+                <span className="font-mono">${tripSpent.toFixed(2)}</span>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
+
+      {/* Trip Navigation */}
+      <Link href="/finance/wants/trips">
+        <Card className="hover:bg-accent/5 transition-colors cursor-pointer">
+          <CardContent className="py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Plane className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-semibold">Trip Budgets</p>
+                {activeTrip ? (
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    Active: {activeTrip.name}
+                    {activeTrip.destination ? ` · ${activeTrip.destination}` : ''}
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Track spending on trips</p>
+                )}
+              </div>
+            </div>
+            <span className="text-muted-foreground">→</span>
+          </CardContent>
+        </Card>
+      </Link>
 
       {/* Add Transaction Button */}
       <Button

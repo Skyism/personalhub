@@ -1,0 +1,7 @@
+{
+  "setup-worktree": [
+    "npm ci",
+    "cp $ROOT_WORKTREE_PATH/.env.local .env.local",
+    "npm run dev"
+  ]
+}

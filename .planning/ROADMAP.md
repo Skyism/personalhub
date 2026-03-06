@@ -98,6 +98,44 @@ Critical UX gaps identified in current navigation:
 
 **Result:** Phase 8.2 complete. All plans executed successfully. Complete hierarchical navigation system shipped with home page module cards, dynamic breadcrumbs with W3C ARIA accessibility, TopAppBar with back button integration across all Finance pages, and desktop sidebar navigation. Solves all critical UX gaps: users can now navigate from home to modules, desktop has visible navigation, clear back button behavior, and breadcrumb context throughout the app.
 
+#### Phase 8.3: Trip Budget Tracking (INSERTED)
+
+**Goal**: Add trip-scoped budget tracking under the wants feature with per-trip budgets, dual-deduction totals (trip spending counts against both trip budget and wants budget), full CRUD operations, and SMS support via "trip" keyword
+**Depends on**: Phase 8.1 (Semi-Annual Wants Budget)
+**Research**: None needed (extends established wants patterns)
+**Status**: Not started
+**Plans**: 0/4 complete
+
+Plans:
+- [ ] 8.3-01: Database Schema (wants_trips and wants_trip_transactions tables with partial unique index for one-active-trip constraint)
+- [ ] 8.3-02: SMS Integration Extension (extend parser for "trip" keyword, route to wants_trip_transactions via active trip)
+- [ ] 8.3-03: Trip UI (trip list, create/edit form, detail page with budget overview and transaction CRUD)
+- [ ] 8.3-04: Wants Overview Integration (dual-deduction totals, trip spending breakdown, active trip indicator, trips navigation)
+
+**Details:**
+Finance module enhancement extending the wants budget (Phase 8.1) with trip-scoped tracking. Key concepts:
+- A trip is a time-bounded spending context with its own budget
+- Trip transactions dual-deduct: they count against both the trip budget and the semi-annual wants budget
+- Only one trip can be "active" at a time (enforced via partial unique index)
+- SMS support: text "trip 25 dinner" to log expense to active trip
+- Status flow: planned → active → completed
+- Wants overview total = wants_transactions + wants_trip_transactions
+
+#### Phase 6.1: Yearly Spending Analytics (INSERTED)
+
+**Goal**: Add yearly spending view under Analytics: separate route with year selector, total spent, per-category breakdown (including Uncategorized), and one monthly spending chart
+**Depends on**: Phase 6 (Analytics Dashboard)
+**Research**: PRD at .planning/yearly-analytics-prd.md
+**Status**: Complete
+**Plans**: 3/3 complete
+
+Plans:
+- [x] 6.1-01: Data & page foundation (yearly aggregation, route /finance/analytics/yearly, year selector, summary, category table) - Completed 2026-03-06
+- [x] 6.1-02: Monthly spending chart (Jan–Dec bar chart on yearly page) - Completed 2026-03-06
+- [x] 6.1-03: Entry link & polish (link from analytics to yearly, back nav, empty state) - Completed 2026-03-06
+
+**Details:** Read-only aggregation from transactions + categories. No new tables. Scope: monthly-budget transactions only (no wants/trip). Uncategorized transactions shown as "Uncategorized" in breakdown.
+
 ### 🔄 v1.1 Skincare Routine Tracker (Pivoted)
 
 **Milestone Goal:** Daily skincare routine tracker with customizable Monday-Sunday schedule for morning and night routines. Display today's routine for quick reference.
@@ -331,6 +369,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 8. UI Overhaul | v1.0 | 3/3 | Complete | 2026-01-14 |
 | **8.1. Wants Budget (URGENT)** | Finance | 4/4 | Complete | 2026-01-15 |
 | **8.2. Navigation System (URGENT)** | UX | 3/3 | Complete | 2026-01-19 |
+| **8.3. Trip Budget Tracking (URGENT)** | Finance | 0/4 | Not started | - |
+| **6.1. Yearly Spending Analytics** | Finance | 3/3 | Complete | 2026-03-06 |
 | 9. Skincare Schema | v1.1 | 1/1 | DEPRECATED | 2026-01-15 |
 | 10. Settings UI | v1.1 | 2/2 | DEPRECATED | 2026-01-15 |
 | 11. Scheduler Setup | v1.1 | 2/2 | DEPRECATED | 2026-01-15 |

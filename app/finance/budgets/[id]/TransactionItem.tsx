@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { deleteTransaction, updateTransactionCategory } from '../transactions/actions'
 import type { Tables } from '@/lib/database.types'
@@ -32,10 +32,41 @@ function formatTransactionDate(dateString: string): string {
 
 export default function TransactionItem({ transaction, budgetId, categories }: TransactionItemProps) {
   const [isDeleting, setIsDeleting] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(transaction.category_id)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDropdownOpen])
+
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isDropdownOpen) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [isDropdownOpen])
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this transaction? This action cannot be undone.')) {
@@ -60,37 +91,29 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
     }
   }
 
-  const handleEditClick = () => {
-    setIsEditing(true)
-    setError(null)
-  }
+  const handleCategorySelect = (categoryId: number | null) => {
+    // Don't save if selecting the same category
+    if (categoryId === transaction.category_id) {
+      setIsDropdownOpen(false)
+      return
+    }
 
-  const handleCancelEdit = () => {
-    setIsEditing(false)
-    setSelectedCategory(transaction.category_id)
+    setIsDropdownOpen(false)
     setError(null)
-  }
 
-  const handleSaveCategory = () => {
     startTransition(async () => {
-      const result = await updateTransactionCategory(transaction.id, selectedCategory)
+      const result = await updateTransactionCategory(transaction.id, categoryId)
 
-      if (result.success) {
-        setIsEditing(false)
-        setError(null)
-      } else {
+      if (!result.success) {
         setError(result.error || 'Failed to update category')
       }
     })
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleSaveCategory()
-    } else if (e.key === 'Escape') {
-      e.preventDefault()
-      handleCancelEdit()
+  const toggleDropdown = () => {
+    if (!isPending) {
+      setIsDropdownOpen(!isDropdownOpen)
+      setError(null)
     }
   }
 
@@ -100,75 +123,111 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
       className={`group bg-muted border border-border rounded-lg p-4 transition-colors ${
-        isEditing ? 'border-primary bg-primary/5' : 'hover:bg-muted/80'
+        isDropdownOpen ? 'border-primary bg-primary/5' : 'hover:bg-muted/80'
       }`}>
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            {isEditing ? (
-              <div className="flex items-center gap-2">
-                <select
-                  value={selectedCategory === null ? '' : selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value === '' ? null : parseInt(e.target.value))}
-                  onKeyDown={handleKeyDown}
-                  className="px-2 py-1 rounded text-xs font-medium border border-border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={isPending}
-                  autoFocus
-                  aria-label="Select category"
-                >
-                  <option value="">Uncategorized</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  onClick={handleSaveCategory}
-                  disabled={isPending}
-                  className="px-2 py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:bg-muted disabled:cursor-not-allowed"
-                >
-                  {isPending ? 'Saving...' : 'Save'}
-                </button>
-                <button
-                  onClick={handleCancelEdit}
-                  disabled={isPending}
-                  className="px-2 py-1 text-xs font-medium text-foreground hover:text-accent-foreground disabled:text-muted-foreground"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  onClick={handleEditClick}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors hover:bg-muted border border-transparent hover:border-border active:bg-gray-200"
-                  aria-label="Edit category"
-                >
-                  {transaction.categories ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={toggleDropdown}
+                disabled={isPending}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors border ${
+                  isDropdownOpen
+                    ? 'bg-primary/10 border-primary'
+                    : 'border-transparent hover:border-border hover:bg-muted'
+                } ${isPending ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer active:bg-gray-200'}`}
+                aria-label="Change category"
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
+              >
+                {transaction.categories ? (
+                  <span
+                    className="flex items-center gap-1"
+                    style={{
+                      color: transaction.categories.color || '#6B7280'
+                    }}
+                  >
                     <span
-                      className="flex items-center gap-1"
+                      className="w-2 h-2 rounded-full"
                       style={{
-                        color: transaction.categories.color || '#6B7280'
+                        backgroundColor: transaction.categories.color || '#9CA3AF'
+                      }}
+                    />
+                    {transaction.categories.name}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">Uncategorized</span>
+                )}
+                {isPending ? (
+                  <svg className="w-3 h-3 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : (
+                  <svg 
+                    className={`w-3 h-3 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </button>
+
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 mt-1 z-50 bg-background border border-border rounded-lg shadow-lg min-w-[180px] max-h-[300px] overflow-y-auto"
+                >
+                  <button
+                    onClick={() => handleCategorySelect(null)}
+                    className={`w-full text-left px-3 py-2 text-xs font-medium hover:bg-muted transition-colors flex items-center gap-2 ${
+                      transaction.category_id === null ? 'bg-primary/10 text-primary' : 'text-foreground'
+                    }`}
+                  >
+                    <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+                    <span>Uncategorized</span>
+                    {transaction.category_id === null && (
+                      <svg className="w-3 h-3 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                  {categories.map(category => (
+                    <button
+                      key={category.id}
+                      onClick={() => handleCategorySelect(category.id)}
+                      className={`w-full text-left px-3 py-2 text-xs font-medium hover:bg-muted transition-colors flex items-center gap-2 ${
+                        transaction.category_id === category.id ? 'bg-primary/10' : 'text-foreground'
+                      }`}
+                      style={{
+                        color: transaction.category_id === category.id 
+                          ? (category.color || '#6B7280')
+                          : undefined
                       }}
                     >
                       <span
                         className="w-2 h-2 rounded-full"
                         style={{
-                          backgroundColor: transaction.categories.color || '#9CA3AF'
+                          backgroundColor: category.color || '#9CA3AF'
                         }}
                       />
-                      {transaction.categories.name}
-                    </span>
-                  ) : (
-                    <span className="text-muted-foreground">Uncategorized</span>
-                  )}
-                  <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                </button>
-              </>
-            )}
+                      <span>{category.name}</span>
+                      {transaction.category_id === category.id && (
+                        <svg className="w-3 h-3 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </div>
             <span className="px-2 py-1 rounded text-xs font-medium bg-accent/20 text-accent-foreground">
               {transaction.source}
             </span>
@@ -187,7 +246,7 @@ export default function TransactionItem({ transaction, budgetId, categories }: T
         </div>
       </div>
 
-      {!isEditing && (
+      {!isDropdownOpen && (
         <div className="flex justify-end gap-2 mt-3 pt-3 border-t border-border">
           <button
             onClick={handleDelete}

@@ -19,9 +19,13 @@ export default async function WantsPage() {
     .maybeSingle();
 
   // Fetch total spent this period and transactions
-  let totalSpent = 0;
+  let wantsSpent = 0;
+  let tripSpent = 0;
   let transactions: any[] = [];
+  let activeTrip: { id: number; name: string; destination: string | null } | null = null;
+
   if (budget) {
+    // Wants transactions
     const { data } = await supabase
       .from('wants_transactions')
       .select('id, amount, note, transaction_date, source, created_at')
@@ -30,8 +34,28 @@ export default async function WantsPage() {
       .order('created_at', { ascending: false });
 
     transactions = data ?? [];
-    totalSpent = transactions.reduce((sum, t) => sum + Number(t.amount), 0);
+    wantsSpent = transactions.reduce((sum, t) => sum + Number(t.amount), 0);
+
+    // Trip transactions (for dual-deduction total)
+    const { data: tripTxns } = await supabase
+      .from('wants_trip_transactions')
+      .select('amount')
+      .eq('wants_budget_id', budget.id);
+
+    tripSpent = (tripTxns ?? []).reduce((sum, t) => sum + Number(t.amount), 0);
+
+    // Active trip indicator
+    const { data: trip } = await supabase
+      .from('wants_trips')
+      .select('id, name, destination')
+      .eq('user_id', TEMP_USER_ID)
+      .eq('status', 'active')
+      .maybeSingle();
+
+    activeTrip = trip;
   }
+
+  const totalSpent = wantsSpent + tripSpent;
 
   return (
     <>
@@ -45,7 +69,15 @@ export default async function WantsPage() {
         {!budget ? (
           <WantsBudgetForm period={period} />
         ) : (
-          <WantsOverview budget={budget} totalSpent={totalSpent} period={period} transactions={transactions} />
+          <WantsOverview
+            budget={budget}
+            totalSpent={totalSpent}
+            wantsSpent={wantsSpent}
+            tripSpent={tripSpent}
+            activeTrip={activeTrip}
+            period={period}
+            transactions={transactions}
+          />
         )}
       </div>
     </>
